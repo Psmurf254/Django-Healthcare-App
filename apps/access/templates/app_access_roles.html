@@ -1,0 +1,174 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Roles - Apps{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<!--<script src="{% static 'js/app-access-roles.js' %}"></script>-->
+<script src="{% static 'js/modal-add-role.js' %}"></script>
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<h4 class="py-3 mb-2">
+  {% translate "Roles" %} {% translate "List" %}
+</h4>
+
+<p class="mb-4">A role provided access to predefined menus and features so that depending on <br> assigned role an administrator can have access to what user needs.</p>
+
+{% if messages %}
+  <div class="toast-container end-0 m-1 me-4">
+    {% for message in messages %}
+    <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+      <div class="toast-body text-center text-white fw-medium">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Role cards -->
+<div class="row g-4">
+  {% for role, users in groups_with_users.items %}
+  <div class="col-xl-4 col-lg-6 col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h6 class="fw-normal mb-2">Total {{ users|length }} users</h6>
+          <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
+            {% for user in users %}
+            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ user.username }}" class="avatar avatar-sm pull-up">
+              <img class="rounded-circle" src="{% static 'img/avatars/4.png' %}" alt="Avatar">
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="d-flex justify-content-between align-items-end mt-1">
+          <div class="role-heading">
+            <h4 class="mb-1">{{ role.name}} <br/> </h4>
+            <a href="{% url 'app-access-roles_update' role.id %}"   class="role-edit-modal"><span>Edit Role</span></a>
+          </div>
+          <a href="javascript:void(0);" class="text-muted"><i class="ti ti-copy ti-md"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="col-xl-4 col-lg-6 col-md-6">
+    <div class="card h-100">
+      <div class="row h-100">
+        <div class="col-sm-5">
+          <div class="d-flex align-items-end h-100 justify-content-center mt-sm-0 mt-3">
+            <img src="{% static 'img/illustrations/add-new-roles.png' %}" class="img-fluid mt-sm-4 mt-md-0" alt="add-new-roles" width="83">
+          </div>
+        </div>
+        <div class="col-sm-7">
+          <div class="card-body text-sm-end text-center ps-sm-0">
+            <button data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn btn-primary mb-2 text-nowrap add-new-role">Add New Role</button>
+            <p class="mb-0 mt-1">Add role, if it does not exist</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+
+    <!-- Role Table -->
+    <div class="card">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-users table border-top">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                 <th>Actions</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for user, roles in user_roles.items %}
+                <tr>
+                    <td></td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% if roles %}
+                            {% for role in roles %}
+                                {{ role.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No roles assigned
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="text-success">Active</span>
+                        {% else %}
+                            <span class="text-warning">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- Actions -->
+
+
+                        {% if perms.room.edit_room %}
+                            <a href="{% url 'app-access-user_update' user.id %}" class="text-body">
+                                {% if user.is_active %}
+                                    <button type="button" class="btn-sm"
+                                            style="border-radius: 20px; padding: 10px 20px; font-size: 14px; background-color: #ffc107; color: #000; border: none; transition: background-color 0.3s ease, color 0.3s ease;"
+                                            onmouseover="this.style.backgroundColor='#5a5a5a'; this.style.color='#fff';"
+                                            onmouseout="this.style.backgroundColor='#ffc107'; this.style.color='#000';">
+                                        Deactivate
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn-sm"
+                                            style="border-radius: 20px; padding: 10px 20px; font-size: 14px; background-color: #28a745; color: #fff; border: none; transition: background-color 0.3s ease, color 0.3s ease;"
+                                            onmouseover="this.style.backgroundColor='#5a5a5a'; this.style.color='#fff';"
+                                            onmouseout="this.style.backgroundColor='#28a745'; this.style.color='#fff';">
+                                        Activate
+                                    </button>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <!--/ Role Table -->
+  </div>
+</div>
+
+<!--/ Role cards -->
+
+<!-- Add Role Modal -->
+{% include "partials/_modals/modal_add_role.html" %}
+{% include "partials/_modals/modal_add_role.html" %}
+<!-- / Add Role Modal -->
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}abouts{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "abouts" %} /</span> {% translate "Update" %} {% translate "about" %}
+</h4>
+
+<!-- Update about Form -->
+<div class="card">
+  <div class="card-body">
+     <form class="update-category pt-0" id="UpdatecategoryForm" action="{% url 'app-asset-manager-about-update' about.id %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label" for="impact">Impact</label>
+          <input type="text" class="form-control" id="impact"  name="impact" aria-label="Room Number" value="{{about.impact}}"/>
+         </div>
+          <div class="mb-3">
+            <label class="form-label" for="commitment">Commitment</label>
+            <input type="text" class="form-control" id="commitment"  name="commitment" aria-label="Room Number" value="{{about.commitment}}"/>
+          </div>
+        <div class="mb-3">
+            <label class="form-label" for="vision">Vision</label>
+            <input type="text" class="form-control" id="vision"  name="vision" aria-label="Room Number"  value="{{about.vision}}"/>
+          </div>
+         <div class="mb-3">
+            <label class="form-label" for="philosophy">Philosophy</label>
+            <input type="text" class="form-control" id="philosophy"  name="philosophy" aria-label="Room Number"  value="{{about.philosophy}}"/>
+          </div>
+
+         <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
+          {% if perms.info.delete_about %}
+         <a href="{% url 'app-asset-manager-about-delete' about.id %}" class="btn btn-danger me-sm-3 me-1 delete-about" data-booking-about="{{ about.about }}">Delete</a>
+         {% endif %}
+         <a href="{% url 'app-asset-manager-abouts-list' %}" class="btn btn-secondary me-sm-3 me-1">Back</a>
+    </form>
+
+  </div>
+</div>
+<!--/ Update about Form -->
+{% endblock %}

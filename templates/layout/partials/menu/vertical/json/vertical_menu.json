@@ -1,0 +1,113 @@
+{
+  "menu": [
+
+    {
+      "name": "Info Manager",
+      "icon": "menu-icon tf-icons ti ti-users",
+      "slug": "app-contacts",
+
+      "submenu": [
+        {
+          "url": "app-asset-manager-contacts-list",
+          "name": "Contacts",
+           "permission": "info.view_contact",
+          "slug": "app-asset-manager-contacts-list"
+        },
+        {
+          "url": "app-asset-manager-abouts-list",
+          "name": "Abouts",
+          "permission": "info.view_about",
+          "slug": "app-asset-manager-abouts-list"
+        },
+         {
+          "url": "app-asset-manager-faqs-list",
+          "name": "FAQs",
+           "permission": "info.view_faq",
+          "slug": "app-asset-manager-faqs-list"
+        }
+      ]
+    },
+     {
+      "url": "app-asset-manager-patients-list",
+      "name": "Patients",
+      "icon": "menu-icon tf-icons ti ti-user",
+       "permission": "patients.view_patient",
+      "slug": "app-asset-manager-patients-list"
+
+    },
+    {
+      "url": "app-asset-manager-categories-list",
+      "name": "Specialist Categories",
+      "icon": "menu-icon tf-icons ti ti-plus",
+      "permission": "specialists.view_specialistcategory",
+      "slug": "app-asset-manager-categories"
+
+    },
+     {
+      "url": "app-asset-manager-specialists-list",
+      "name": "Specialists",
+      "icon": "menu-icon tf-icons ti ti-user",
+       "permission": "specialists.view_specialist",
+      "slug": "app-asset-manager-specialists-list"
+
+    },
+     {
+      "url": "app-asset-manager-concerns-list",
+      "name": "Common Concerns",
+      "icon": "menu-icon tf-icons ti ti-heart-broken",
+       "permission": "specialists.view_commonconsultation",
+      "slug": "app-asset-manager-concerns-list"
+
+    },
+    {
+      "url": "app-asset-manager-appointments-list",
+      "name": "Appointments",
+      "icon": "menu-icon tf-icons ti ti-calendar",
+       "permission": "specialists.view_appointment",
+      "slug": "app-asset-manager-appointments-list"
+
+    },
+    {
+      "url": "app-asset-manager-feedbacks-list",
+      "name": "Feedbacks",
+      "icon": "menu-icon tf-icons ti ti-star",
+       "permission": "specialists.view_specialistfeedback",
+      "slug": "app-asset-manager-feedbacks-list"
+
+    },
+    {
+      "url": "transactions",
+      "name": "Payments",
+      "permission": "transactions.view_transaction",
+      "icon": "menu-icon tf-icons ti ti-wallet",
+      "slug": "transactions"
+
+    },
+     {
+      "url": "app-asset-manager-notifications",
+      "name": "Messages",
+      "permission": "notifications.view_notification",
+      "icon": "menu-icon tf-icons ti ti-message",
+      "slug": "app-asset-manager-notifications"
+
+    },
+
+     {
+      "url": "app-access-roles",
+      "name": "Roles",
+      "icon": "menu-icon tf-icons ti ti-lock",
+       "permission": "roles.view_roles",
+      "slug": "app-asset-manager-roles"
+
+    },
+
+    {
+      "url": "auth-reset-password-basic",
+      "name": "Reset Password",
+      "icon": "menu-icon tf-icons ti ti-key",
+      "slug": "auth-reset-password-basic"
+
+    }
+
+  ]
+}

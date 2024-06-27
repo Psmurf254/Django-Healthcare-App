@@ -1,0 +1,94 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Appointments{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'js/app-field-control.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "appointments" %} /</span> {% translate "Update" %} {% translate appointment.patient.full_name %} <span class="text-muted fw-light">{% translate "with" %}</span> {% translate appointment.specialist.full_name %}
+</h4>
+
+<!-- Update Appointment Form -->
+<div class="card">
+  <div class="card-body">
+     <form class="update-category pt-0" id="UpdatecategoryForm" action="{% url 'app-asset-manager-appointment-update' appointment.id %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label" for="specialist">Specialist</label>
+          <select id="specialist" name="specialist" class="select2 form-select" required>
+            {% for specialist in specialists %}
+             <option value="{{ specialist.id }}" {% if specialist.id == appointment.specialist.id %}selected{% endif %}>{{ specialist.full_name|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="patient">Patient</label>
+          <select id="patient" name="patient" class="select2 form-select" required>
+            {% for patient in patients %}
+              <option value="{{ patient.id }}" {% if patient.id == appointment.patient.id %}selected{% endif %}>{{ patient.full_name|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
+       <div class="mb-3">
+          <label class="form-label" for="date_time">Date and Time</label>
+          <input type="datetime-local" class="form-control" id="date_time" name="date_time" value="{{ appointment.date_time|date:'Y-m-d\TH:i' }}"/>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="concern">Concern</label>
+          <input type="text" class="form-control" id="concern" name="concern" value="{{ appointment.concern }}"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="status">Status</label>
+          <select id="status" class="select2 form-select" name="status">
+              <option value="pending" {% if appointment.status == 'pending' %} selected {% endif %}>Pending</option>
+              <option value="accepted" {% if appointment.status == 'accepted' %} selected {% endif %}>Accepted</option>
+              <option value="cancelled" {% if appointment.status == 'cancelled' %} selected {% endif %}>Cancelled</option>
+              <option value="rejected" {% if appointment.status == 'rejected' %} selected {% endif %}>Rejected</option>
+              <option value="completed" {% if appointment.status == 'completed' %} selected {% endif %}>Completed</option>
+          </select>
+        </div>
+       <div class="mb-4" id="cancel_reason_container" style="display: none;">
+          <label class="form-label" for="cancel_reason">Reason for Cancellation</label>
+          <input type="text" id="cancel_reason" name="cancel_reason" value="{{ appointment.cancel_reason }}" class="form-control"/>
+        </div>
+        <div class="mb-4" id="reject_reason_container" style="display: none;">
+          <label class="form-label" for="reject_reason">Reason for Rejection</label>
+          <input type="text" id="reject_reason" name="reject_reason" value="{{ appointment.reject_reason }}" class="form-control"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
+        {% if perms.specialists.delete_appointment %}
+        <a href="{% url 'app-asset-manager-appointment-delete' appointment.id %}" class="btn btn-danger me-sm-3 me-1 delete-about" data-booking-about="{{ about.about }}">Delete</a>
+         {% endif %}
+        <a href="{% url 'app-asset-manager-appointments-list' %}" class="btn btn-secondary me-sm-3 me-1">Back</a>
+      </form>
+  </div>
+</div>
+<!--/ Update Appointment Form -->
+{% endblock %}

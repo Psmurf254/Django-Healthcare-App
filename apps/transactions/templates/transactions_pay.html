@@ -1,0 +1,67 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Transactions{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/transactions-add-update.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "Transactions" %} /</span> {% translate "Make" %} {% translate "Payment" %}
+</h4>
+<!-- Add Transactions Form -->
+<div class="card">
+  <div class="card-body">
+    <form class="add-transactions pt-0" id="addTransactionForm" action="{% url 'transactions-pay' transaction_id.id %}" method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label" for="phone_number">Phone number</label>
+        <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Mpesa Phone" required />
+      </div>
+
+      <div class="d-flex flex-wrap">
+
+        <div class="mb-3 me-3">
+          <label class="form-label" for="amount_to_pay">Amount to Pay</label>
+          <input type="text" class="form-control text-warning" id="amount_to_pay" name="amount_to_pay" value="{{ transaction_id.amount }}" readonly />
+        </div>
+        <div class="mb-3 me-3">
+          <label class="form-label" for="Service">Service Name</label>
+          <input type="text" class="form-control" id="Service" name="Service" value="Appointment Ticket" readonly />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="appointment">Appointment</label>
+          <input type="text" class="form-control" id="appointment" name="appointment" value="{{ transaction_id.appointment }}" readonly />
+        </div>
+        <!-- Add more fields for other transaction details as needed -->
+      </div>
+
+      <button type="submit" class="btn btn-primary me-sm-3 me-1" name="submitButton">Pay</button>
+      <a href="{% url 'transactions' %}" class="btn btn-secondary">Back</a>
+    </form>
+  </div>
+</div>
+<!--/ Add Transactions Form -->
+{% endblock %}

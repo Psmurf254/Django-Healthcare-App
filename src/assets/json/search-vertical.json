@@ -1,0 +1,74 @@
+{
+  "pages": [
+    {
+      "name": "Not Authorized",
+      "icon": "ti-user-x",
+      "url": "/pages/misc/not_authorized/"
+    },
+    {
+      "name": "Login Basic",
+      "icon": "ti-login",
+      "url": "/auth/login/basic/"
+    },
+    {
+      "name": "Login Cover",
+      "icon": "ti-login",
+      "url": "/auth/login/cover/"
+    },
+    {
+      "name": "Register Basic",
+      "icon": "ti-user-plus",
+      "url": "/auth/register/basic/"
+    },
+    {
+      "name": "Register Cover",
+      "icon": "ti-user-plus",
+      "url": "/auth/register/cover/"
+    },
+    {
+      "name": "Register Multi-steps",
+      "icon": "ti-user-plus",
+      "url": "/auth/register/multisteps/"
+    },
+    {
+      "name": "Verify Email Basic",
+      "icon": "ti-mail",
+      "url": "/auth/verify_email/basic/"
+    },
+    {
+      "name": "Verify Email Cover",
+      "icon": "ti-mail",
+      "url": "/auth/verify_email/cover/"
+    },
+    {
+      "name": "Reset Password Basic",
+      "icon": "ti-help",
+      "url": "/auth/reset_password/basic/"
+    },
+    {
+      "name": "Reset Password Cover",
+      "icon": "ti-help",
+      "url": "/auth/reset_password/cover/"
+    },
+    {
+      "name": "Forgot Password Basic",
+      "icon": "ti-question-mark",
+      "url": "/auth/forgot_password/basic/"
+    },
+    {
+      "name": "Forgot Password Cover",
+      "icon": "ti-question-mark",
+      "url": "/auth/forgot_password/cover/"
+    },
+    {
+      "name": "Two Steps Verification Basic",
+      "icon": "ti-question-mark",
+      "url": "/auth/two_steps/basic/"
+    },
+    {
+      "name": "Two Steps Verification Cover",
+      "icon": "ti-question-mark",
+      "url": "/auth/two_steps/cover/"
+    }
+  ]
+}

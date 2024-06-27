@@ -1,0 +1,146 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Specialist{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "Specialists" %} /</span> {% translate "Update" %} {% translate "Specialist" %} #{{ specialist.full_name }}
+</h4>
+
+<!-- Update Specialist Form -->
+<div class="card">
+  <div class="card-body">
+    <form class="update-specialist pt-0" id="UpdateSpecialistForm" action="{% url 'app-asset-manager-specialist-update' specialist.id %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label" for="category">Category</label>
+        <select id="category" name="category" class="select2 form-select" required>
+          {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == specialist.category.id %}selected{% endif %}>{{ category.name|upper }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="full_name">Full Name</label>
+        <input type="text" class="form-control" id="full_name" value="{{ specialist.full_name }}" name="full_name" aria-label="Full Name" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="gender">Gender</label>
+        <input type="text" class="form-control" id="gender" name="gender" value="{{ specialist.gender }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="date_of_birth">Date of Birth</label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ specialist.date_of_birth|date:'Y-m-d' }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="contact_phone">Contact Phone</label>
+        <input type="text" class="form-control" id="contact_phone" name="contact_phone" value="{{ specialist.contact_phone }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="contact_email">Contact Email</label>
+        <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ specialist.contact_email }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="national_id">National ID</label>
+        <input type="text" class="form-control" id="national_id" name="national_id" value="{{ specialist.national_id }}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="medical_license_number">Medical License Number</label>
+        <input type="text" class="form-control" id="medical_license_number" name="medical_license_number" value="{{ specialist.medical_license_number }}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="pricing">Pricing</label>
+        <input type="number" step="0.01" class="form-control" id="pricing" name="pricing" value="{{ specialist.pricing }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="years_of_experience">Years of Experience</label>
+        <input type="number" class="form-control" id="years_of_experience" name="years_of_experience" value="{{ specialist.years_of_experience }}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" name="description">{{ specialist.description }}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="biography">Biography</label>
+        <textarea class="form-control" id="biography" name="biography">{{ specialist.biography }}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="languages_spoken">Languages Spoken</label>
+        <input type="text" class="form-control" id="languages_spoken" name="languages_spoken" value="{{ specialist.languages_spoken }}" required/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="average_rating">Average Rating</label>
+        <input type="number" step="0.01" class="form-control text-warning" id="average_rating" name="average_rating" value="{{ specialist.average_rating }}" readonly/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="total_consultations">Total Consultations</label>
+        <input type="number" class="form-control text-warning" id="total_consultations" name="total_consultations" value="{{ specialist.total_consultations }}" readonly/>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="profile_picture">Profile Picture</label>
+        {% if specialist.profile_picture %}
+        <div>
+          <img src="{{ specialist.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail" style="max-width: 50px;">
+        </div>
+        {% endif %}
+        <input type="file" class="form-control" id="profile_picture" name="profile_picture"/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="verified">Verified</label>
+        <input type="checkbox" id="verified" name="verified" {% if specialist.verified %}checked{% endif %}/>
+      </div>
+       <div class="mb-3">
+        <label class="form-label" for="status">Active Status</label>
+        <input type="checkbox" id="status" name="status" {% if specialist.status %}checked{% endif %}/>
+      </div>
+      <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
+       {% if perms.specialists.delete_patient %}
+      <a href="{% url 'app-asset-manager-specialist-delete' specialist.id %}" class="btn btn-danger me-sm-3 me-1 delete-patient" data-booking-patient="{{ patient.patient }}">Delete</a>
+      {% endif %}
+      <a href="{% url 'app-asset-manager-specialists-list' %}" class="btn btn-secondary me-sm-3 me-1">Back</a>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

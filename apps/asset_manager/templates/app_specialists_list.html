@@ -1,0 +1,275 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Specialists List - Pages{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-specialists-list.js' %}"></script>
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% endblock page_js %}
+
+
+{% block content %}
+
+{#<div class="row g-4 mb-4">#}
+{#  <div class="col-sm-6 col-xl-3">#}
+{#    <div class="card">#}
+{#      <div class="card-body">#}
+{#        <div class="d-flex align-it]ems-start justify-content-between">#}
+{#          <div class="content-left">#}
+{#            <span>Session</span>#}
+{#            <div class="d-flex align-items-center my-2">#}
+{#              <h3 class="mb-0 me-2">21,459</h3>#}
+{#              <p class="text-success mb-0">(+29%)</p>#}
+{#            </div>#}
+{#            <p class="mb-0">Total patients</p>#}
+{#          </div>#}
+{#          <div class="avatar">#}
+{#            <span class="avatar-initial rounded bg-label-primary">#}
+{#              <i class="ti ti-patient ti-sm"></i>#}
+{#            </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#  <div class="col-sm-6 col-xl-3">#}
+{#    <div class="card">#}
+{#      <div class="card-body">#}
+{#        <div class="d-flex align-items-start justify-content-between">#}
+{#          <div class="content-left">#}
+{#            <span>Paid patients</span>#}
+{#            <div class="d-flex align-items-center my-2">#}
+{#              <h3 class="mb-0 me-2">4,567</h3>#}
+{#              <p class="text-success mb-0">(+18%)</p>#}
+{#            </div>#}
+{#            <p class="mb-0">Last week analytics </p>#}
+{#          </div>#}
+{#          <div class="avatar">#}
+{#            <span class="avatar-initial rounded bg-label-danger">#}
+{#              <i class="ti ti-patient-plus ti-sm"></i>#}
+{#            </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#  <div class="col-sm-6 col-xl-3">#}
+{#    <div class="card">#}
+{#      <div class="card-body">#}
+{#        <div class="d-flex align-items-start justify-content-between">#}
+{#          <div class="content-left">#}
+{#            <span>Active patients</span>#}
+{#            <div class="d-flex align-items-center my-2">#}
+{#              <h3 class="mb-0 me-2">19,860</h3>#}
+{#              <p class="text-danger mb-0">(-14%)</p>#}
+{#            </div>#}
+{#            <p class="mb-0">Last week analytics</p>#}
+{#          </div>#}
+{#          <div class="avatar">#}
+{#            <span class="avatar-initial rounded bg-label-success">#}
+{#              <i class="ti ti-patient-check ti-sm"></i>#}
+{#            </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#  <div class="col-sm-6 col-xl-3">#}
+{#    <div class="card">#}
+{#      <div class="card-body">#}
+{#        <div class="d-flex align-items-start justify-content-between">#}
+{#          <div class="content-left">#}
+{#            <span>Pending patients</span>#}
+{#            <div class="d-flex align-items-center my-2">#}
+{#              <h3 class="mb-0 me-2">237</h3>#}
+{#              <p class="text-success mb-0">(+42%)</p>#}
+{#            </div>#}
+{#            <p class="mb-0">Last week analytics</p>#}
+{#          </div>#}
+{#          <div class="avatar">#}
+{#            <span class="avatar-initial rounded bg-label-warning">#}
+{#              <i class="ti ti-patient-exclamation ti-sm"></i>#}
+{#            </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+{% if messages %}
+    <div class="toast-container end-0 m-1 me-4">
+      {% for message in messages %}
+      <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+        <div class="toast-body text-center text-white fw-medium">
+          {{ message }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+<!-- specialists List Table -->
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-3">Search Filter</h5>
+    <div class="d-flex justify-content-between align-items-center row pb-2 gap-3 gap-md-0">
+      <div class="col-md-4 patient_role"></div>
+      <div class="col-md-4 patient_plan"></div>
+      <div class="col-md-4 patient_status"></div>
+    </div>
+  </div>
+  <div class="card-datatable table-responsive">
+    <table class="datatables-patients table">
+      <thead class="border-top">
+        <tr>
+          <th></th>
+          <th>Full name</th>
+          <th>Category</th>
+          <th>Contacts</th>
+           <th>Consultations</th>
+          <td>Verification</td>
+          <td>Status</td>
+           <td>Actions</td>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for specialist in specialists %}
+        <tr>
+            <td></td>
+            <td>
+              {% if perms.specialists.change_specialist %}
+              <a href="{% url 'app-asset-manager-specialist-update' specialist.id %}"> {{ specialist.full_name|upper }}</a>
+              {% else %}
+              {{ specialist.full_name|upper }}
+              {% endif %}
+            </td>
+            <td>{{specialist.category}}</td>
+            <td>{{specialist.contact_phone}}</td>
+            <td>{{specialist.total_consultations}}</td>
+           <td>
+                {% if specialist.verified %}
+                    <span class="text-success">Approved</span>
+                {% else %}
+                    <span class="text-warning">Not Approved</span>
+                {% endif %}
+           </td>
+          <td>
+             {% if specialist.status == 'Active' %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-warning">In Active</span>
+                {% endif %}
+          </td>
+             <td>
+               <!-- Actions -->
+                {% if perms.room.edit_specialist %}
+                    <a href="{% url 'app-asset-manager-specialist-verification-update' specialist.id %}" class="text-body">
+                        {% if specialist.verified %}
+                            <button type="button" class="btn-sm rounded badge bg-warning">
+                                Disapprove
+                            </button>
+                        {% else %}
+                             <button type="button" class="btn-sm rounded badge bg-success">
+                                Approve
+                            </button>
+                        {% endif %}
+                    </a>
+                {% endif %}
+                    </td>
+          <td></td>
+        </tr>
+       {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <!-- Offcanvas to add new patient -->
+{% if perms.specialists.add_specialist %}
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddpatient" aria-labelledby="offcanvasAddpatientLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasAddpatientLabel" class="offcanvas-title">Add Specialist</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
+      <form class="add-new-patient pt-0" id="addNewpatientForm" action="{% url 'app-asset-manager-specialists-list' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="mb-3">
+          <label class="form-label" for="category">Category</label>
+          <select id="category" name="category" class="select2 form-select" required>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="full_name">Full Name</label>
+          <input type="text" class="form-control" id="full_name" placeholder="e.g JOHN DOE" name="full_name" aria-label="Room Number" required/>
+        </div>
+         <div class="mb-3">
+         <label class="form-label" for="medical_license_number">Medical license number</label>
+          <input type="text" class="form-control" id="medical_license_number"  name="medical_license_number" aria-label="Room Number" required/>
+        </div>
+         <div class="mb-3">
+       <label class="form-label" for="pricing">Pricing</label>
+          <input type="number" class="form-control" id="pricing"  name="pricing" aria-label="Room Number" required/>
+        </div>
+          <div class="mb-3">
+            <label class="form-label" for="gender">Gender</label>
+            <input type="text" class="form-control" id="gender"  name="gender" aria-label="Room Number" required/>
+          </div>
+        <div class="mb-3">
+            <label class="form-label" for="date_of_birth">Date of Birth</label>
+            <input type="date" class="form-control" id="date_of_birth"  name="date_of_birth" aria-label="Room Number" required/>
+          </div>
+             <div class="mb-3">
+            <label class="form-label" for="contact_phone">Contact Phone</label>
+            <input type="text" class="form-control" id="contact_phone"  name="contact_phone" aria-label="Room Number" required/>
+          </div>
+         <div class="mb-3">
+            <label class="form-label" for="contact_email">Contact Email</label>
+            <input type="email" class="form-control" id="contact_email"  name="contact_email" aria-label="Room Number" required/>
+          </div>
+        <div class="mb-3">
+            <label class="form-label" for="languages_spoken">Languages</label>
+            <input type="text" class="form-control" id="languages_spoken"  name="languages_spoken" aria-label="Room Number" required/>
+          </div>
+         <div class="mb-3">
+            <label class="form-label" for="profile_picture">Profile Picture</label>
+            <input type="file" class="form-control" id="profile_picture"  name="profile_picture" aria-label="Room Number" required/>
+          </div>
+
+        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

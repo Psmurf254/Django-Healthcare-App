@@ -1,0 +1,81 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}patients{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "Patients" %} /</span> {% translate "Update" %} {% translate "Patient" %} #{{ patient.full_name }}
+</h4>
+
+<!-- Update Patient Form -->
+<div class="card">
+  <div class="card-body">
+    <form class="update-patient pt-0" id="UpdatePatientForm" action="{% url 'app-asset-manager-patient-update' patient.id %}" method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label" for="full_name">Full Name</label>
+        <input type="text" class="form-control" id="full_name" value="{{ patient.full_name }}" name="full_name" aria-label="Full Name" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="gender">Gender</label>
+        <input type="text" class="form-control" id="gender" name="gender" value="{{ patient.gender }}" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="date_of_birth">Date of Birth</label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ patient.date_of_birth|date:'Y-m-d' }}" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="contact_phone">Contact Phone</label>
+        <input type="text" class="form-control" id="contact_phone" name="contact_phone" value="{{ patient.contact_phone }}" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="contact_email">Contact Email</label>
+        <input type="text" class="form-control" id="contact_email" name="contact_email" value="{{ patient.contact_email }}" required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="profile_picture">Profile Picture</label>
+        {% if patient.profile_picture %}
+        <div>
+          <img src="{{ patient.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;">
+        </div>
+        {% endif %}
+        <input type="file" class="form-control" id="profile_picture" name="profile_picture"/>
+      </div>
+
+      <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
+       {% if perms.patients.delete_patient %}
+      <a href="{% url 'app-asset-manager-patients-delete' patient.id %}" class="btn btn-danger me-sm-3 me-1 delete-patient" data-booking-patient="{{ patient.patient }}">Delete</a>
+      {% endif %}
+      <a href="{% url 'app-asset-manager-patients-list' %}" class="btn btn-secondary me-sm-3 me-1">Back</a>
+    </form>
+  </div>
+</div>
+<!--/ Update Patient Form -->
+{% endblock %}

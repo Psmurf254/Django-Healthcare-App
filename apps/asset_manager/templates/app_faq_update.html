@@ -1,0 +1,59 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}patients{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "Faqs" %} /</span> {% translate "Update" %} {% translate "Faq" %} #{{ faq.question }}
+</h4>
+
+<!-- Update Faq Form -->
+<div class="card">
+  <div class="card-body">
+    <form class="update-patient pt-0" id="UpdatePatientForm" action="{% url 'app-asset-manager-faq-update' faq.id %}" method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label" for="question">Question</label>
+        <input type="text" class="form-control" id="question" value="{{ faq.question }}" name="question"  required/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="answer">Answer</label>
+        <input type="text" class="form-control" id="answer" name="answer" value="{{ faq.answer }}" required/>
+      </div>
+      <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
+      {% if perms.info.delete_faq %}
+      <a href="{% url 'app-asset-manager-faq-delete' faq.id %}" class="btn btn-danger me-sm-3 me-1 delete-patient" data-booking-patient="{{ patient.patient }}">Delete</a>
+      {% endif %}
+      <a href="{% url 'app-asset-manager-faqs-list' %}" class="btn btn-secondary me-sm-3 me-1">Back</a>
+    </form>
+  </div>
+</div>
+<!--/ Update Patient Form -->
+{% endblock %}

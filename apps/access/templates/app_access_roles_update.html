@@ -1,0 +1,85 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Transactions{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/transactions-add-update.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">{% translate "Role" %} /</span> {% translate "Update" %} {% translate "Role" %} #{{ role.name }}
+</h4>
+
+<!-- Update Role Form -->
+<form id="updateRoleForm" class="row g-3" action="{% url 'app-access-roles_update' role_id=role.id %}" method="post">
+    {% csrf_token %}
+    <div class="col-12 mb-4">
+        <label class="form-label" for="name">Role Name</label>
+        <input type="text" id="name" name="name" class="form-control" value="{{ role.name }}" readonly />
+    </div>
+
+    <!-- Add users -->
+    <div class="col-12">
+        <h5>Add Users</h5>
+        <select multiple class="form-select" id="users" name="users">
+            {% for user in users %}
+            <option value="{{ user.id }}" {% if user in role.user_set.all %}selected{% endif %}>{{ user.username }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <h5>Role Permissions</h5>
+    <!-- Permission table -->
+    <div class="table-responsive">
+        <table class="table table-flush-spacing">
+            <tbody>
+                {% for permission in permissions %}
+                <tr>
+                    <td class="text-nowrap fw-medium">{{ permission.name }}</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="{{ permission.codename }}" name="permissions" value="{{ permission.id }}" {% if permission in role.permissions.all %}checked{% endif %} />
+                            <label class="form-check-label" for="{{ permission.codename }}">
+                                {{ permission.name }}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+        <a href="{% url 'app-access-roles_delete' role.id %}" class="btn btn-danger me-sm-3 me-1 delete-tenant">Delete</a>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+    </div>
+</form>
+<!--/ Update Role Form -->
+
+{% endblock %}
