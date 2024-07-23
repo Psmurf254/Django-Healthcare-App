@@ -29,13 +29,13 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     path("", include("apps.dashboards.urls")),
-    path("api/", include("apps.api.urls")),
+    path("", include("apps.api.urls")),
 
     # Calendar urls
     path("", include("apps.my_calendar.urls")),
 
     # kanban urls
-    path("", include("apps.kanban.urls")),
+    # path("", include("apps.kanban.urls")),
 
     # User urls
     path("", include("apps.users.urls")),
@@ -55,7 +55,7 @@ urlpatterns = [
 
     # transaction urls
     path("", include("apps.transactions.urls")),
-    path("", include("apps.asset_manager.urls")),
+    path("dashboard/", include("apps.asset_manager.urls")),
     # path('accounts/', include('django_ledger.urls', namespace='django_ledger')),
     # path('appointment/', include('appointment.urls')),
     path('oauth/v1/',include('apps._api_app.urls')),

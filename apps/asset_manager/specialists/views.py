@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import TemplateView
-from apps.api.specialists.models import Specialist, SpecialistCategory
+from apps.api.specialists.models import Specialist, SpecialistCategory, Hospital
 from apps.asset_manager.forms import SpecialistForm, SpecialistUpdateForm
 from web_project import TemplateLayout
 from django.core.mail import send_mail
@@ -18,7 +18,8 @@ class SpecialistView(PermissionRequiredMixin, TemplateView):
         context = TemplateLayout.init(self, super().get_context_data(**kwargs))
         context.update({
             'specialists': Specialist.objects.all(),
-            'categories': SpecialistCategory.objects.all()
+            'categories': SpecialistCategory.objects.all(),
+            'hospitals': Hospital.objects.all(),
         })
         return context
 
@@ -87,7 +88,6 @@ class SpecialistView(PermissionRequiredMixin, TemplateView):
         ).exists()
 
 
-
 class SpecialistUpdateView(PermissionRequiredMixin, TemplateView):
     permission_required = ["specialists.change_specialist"]
 
@@ -96,7 +96,8 @@ class SpecialistUpdateView(PermissionRequiredMixin, TemplateView):
         specialist = get_object_or_404(Specialist, pk=self.kwargs['pk'])
         context.update({
             'specialist': specialist,
-            'categories': SpecialistCategory.objects.all()
+            'categories': SpecialistCategory.objects.all(),
+            'hospitals': Hospital.objects.all(),
         })
         return context
 
@@ -138,9 +139,6 @@ class SpecialistUpdateView(PermissionRequiredMixin, TemplateView):
         return redirect('app-asset-manager-specialists-list')
 
 
-
-
-
 class SpecialistDeleteView(PermissionRequiredMixin, TemplateView):
     permission_required = ["specialists.delete_specialist"]
 
@@ -152,8 +150,10 @@ class SpecialistDeleteView(PermissionRequiredMixin, TemplateView):
         messages.success(request, f'specialist Deleted')
         return redirect('app-asset-manager-specialists-list')
 
+
 class SpecialistUpdateVerification(PermissionRequiredMixin, TemplateView):
     permission_required = ["specialists.change_specialist"]
+
     def get(self, request, specialist_id):
         specialist = get_object_or_404(Specialist, id=specialist_id)
         if specialist.verified:
@@ -174,13 +174,13 @@ class SpecialistUpdateVerification(PermissionRequiredMixin, TemplateView):
                             Health360
                             """
 
-            send_mail(
-                specialist_email_subject,
-                specialist_email_message,
-                settings.DEFAULT_FROM_EMAIL,
-                [specialist.contact_email],
-                fail_silently=False,
-            )
+            # send_mail(
+            #     specialist_email_subject,
+            #     specialist_email_message,
+            #     settings.DEFAULT_FROM_EMAIL,
+            #     [specialist.contact_email],
+            #     fail_silently=False,
+            # )
             messages.success(request, f'{specialist.full_name} Verification updated.')
 
         specialist.save()

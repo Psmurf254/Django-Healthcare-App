@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from datetime import time, datetime, timedelta
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.core.validators import FileExtensionValidator
 from ..patients.models import Patient
 from django.db.models import Avg
 
@@ -15,11 +14,39 @@ class SpecialistCategory(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
     total_specialists = models.PositiveIntegerField(default=0)
-    icon = models.FileField(upload_to="specialistCategory_images", blank=True, null=True,
-                            validators=[FileExtensionValidator(['pdf', 'doc', 'svg'])])
+    icon = models.ImageField(upload_to='specialistCategory_images/', null=True, blank=True)
+    pricing = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.name
+
+
+class Hospital(models.Model):
+    # ('database value', 'display_name')
+    HOSPITAL_TYPE = (
+        ('private', 'Private hospital'),
+        ('public', 'Public hospital'),
+    )
+
+    hospital_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    featured_image = models.ImageField(upload_to='hospitals/', default='hospitals/default.png', null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    email = models.EmailField(max_length=200, null=True, blank=True)
+    phone_number = models.IntegerField(null=True, blank=True)
+    hospital_type = models.CharField(max_length=200, choices=HOSPITAL_TYPE)
+    departments = models.TextField(null=True, blank=True)
+    services = models.TextField(null=True, blank=True)
+    specializations = models.TextField(null=True, blank=True)
+    general_bed_no = models.IntegerField(null=True, blank=True)
+    available_icu_no = models.IntegerField(null=True, blank=True)
+    regular_cabin_no = models.IntegerField(null=True, blank=True)
+    emergency_cabin_no = models.IntegerField(null=True, blank=True)
+    vip_cabin_no = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Specialist(models.Model):
@@ -32,22 +59,22 @@ class Specialist(models.Model):
     ]
 
     status = models.BooleanField(default=True)
-    category = models.ForeignKey(SpecialistCategory, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=10)
-    contact_phone = models.CharField(max_length=15)
-    contact_email = models.EmailField()
+    category = models.ForeignKey(SpecialistCategory, on_delete=models.CASCADE, null=True, blank=True)
+    hospital = models.ManyToManyField(Hospital, null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    contact_phone = models.CharField(max_length=15, null=True, blank=True)
+    contact_email = models.EmailField(null=True, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     national_id = models.CharField(max_length=20, null=True, blank=True)
     medical_license_number = models.CharField(max_length=50, null=True, blank=True)
-    pricing = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     years_of_experience = models.PositiveIntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    biography = models.TextField(blank=True, null='True')
+    biography = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='doctor_profile_pics/', null=True, blank=True)
-    languages_spoken = models.CharField(max_length=255)
-    average_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
-    total_consultations = models.PositiveIntegerField(blank=True, null=True)
+    languages_spoken = models.CharField(max_length=255, null=True, blank=True)
+    average_rating = models.DecimalField(default=0, max_digits=3, decimal_places=2)
+    total_consultations = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     # Availability for Appointments
     sunday_availability = models.BooleanField(default=False)
@@ -102,11 +129,12 @@ class CommonConsultation(models.Model):
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-        ('rejected', 'Rejected'),
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+        ('Rejected', 'Rejected'),
+        ('InProgress', 'InProgress'),
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -125,25 +153,36 @@ class Appointment(models.Model):
         return f"Appointment for {self.patient.full_name} with {self.specialist.full_name} at {self.date_time}"
 
 
-class Diagnosis(models.Model):
+class Consultation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    appointment = models.ForeignKey(Appointment, null=True, blank=True, on_delete=models.CASCADE)
-    diagnosis_text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
+    symptoms = models.TextField()
+    diagnosis = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20,
+                              choices=[('Consultation', 'Consultation'), ('Test Ordered', 'Test Ordered'),
+                                       ('Diagnosis', 'Diagnosis'), ('Prescription', 'Prescription'),
+                                       ('Completed', 'Completed')])
 
-    def __str__(self):
-        return self.diagnosis_text
+
+class Test(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
+    test_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=[('Ordered', 'Ordered'), ('Completed', 'Completed')])
+    results = models.TextField(null=True, blank=True)
+    ordered_date = models.DateField(auto_now_add=True)
+    completed_date = models.DateField(null=True, blank=True)
 
 
 class Prescription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    diagnosis = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
-    prescription_text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.prescription_text
-
+    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE, null=True, blank=True)
+    medication = models.CharField(max_length=255, null=True, blank=True)
+    dosage = models.CharField(max_length=255, null=True, blank=True)
+    duration = models.CharField(max_length=50, null=True, blank=True)
+    instructions = models.TextField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 
@@ -173,7 +212,7 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20, choices=[("Paid", "Paid"), ("Due", "Due"), ("Canceled", "Canceled")])
 
     def __str__(self):
-        return self.reference
+        return f"Transaction {self.id} - {self.status} - {self.amount}"
 
 
 @receiver([post_save, post_delete], sender=Specialist)

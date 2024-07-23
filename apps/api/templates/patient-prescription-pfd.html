@@ -1,0 +1,142 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <title>HealthStack - Prescription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+        .main-wrapper {
+            padding: 8px;
+        }
+        .invoice-item {
+            margin-bottom: 20px;
+        }
+        .invoice-info {
+            margin-bottom: 20px;
+        }
+        .invoice-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-info th, .invoice-info td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .invoice-info th {
+            background-color: #f9f9f9;
+        }
+        .invoice-logo img {
+            max-width: 100px;
+        }
+        .invoice-details {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: rgb(84, 147, 199);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <strong style="font-size: 22px; text-align: center; color: rgb(84, 147, 199);">Patient Prescription</strong>
+        <div class="content">
+            <div class="invoice-item">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="invoice-logo">
+                        <img src="{% static 'img/logo/logo.png' %}" alt="logo">
+                    </div>
+                    <div class="invoice-details">
+                        <p><strong>Date:</strong> {{ prescription.updated_at }}</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+
+            <div class="invoice-item">
+                <div style="display: flex; justify-content: space-between;">
+                    <div class="invoice-info">
+                        <strong style="font-size: 16px; color: rgb(84, 147, 199);">Doctor Information</strong>
+                        <table>
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{ prescription.consultation.appointment.specialist.full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Hospital:</th>
+                                <td>{{ hospital }}</td>
+                            </tr>
+                            <tr>
+                                <th>Department:</th>
+                                <td>{{ prescription.consultation.appointment.specialist.category }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ prescription.consultation.appointment.specialist.contact_email }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="invoice-info">
+                        <strong style="font-size: 16px; color: rgb(84, 147, 199);">Patient Information</strong>
+                        <table>
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{ prescription.consultation.appointment.patient.full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ prescription.consultation.appointment.patient.contact_email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone Number:</th>
+                                <td>{{ prescription.consultation.appointment.patient.contact_phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Age:</th>
+                                <td>{{ age }} Yrs</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-item">
+                <h2 style="background-color: #f9f9f9; padding: 3px">Diagnosis</h2>
+                <p>{{ prescription.consultation.diagnosis|linebreaks }}</p>
+            </div>
+            <hr/>
+            <div class="invoice-item">
+                <h2>Prescription</h2>
+                <table>
+                    <tr style="background-color: #f9f9f9;">
+                        <th>Medication:</th>
+                        <th>Dosage:</th>
+                        <th>Duration:</th>
+                        <th>Instructions</th>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td>{{ prescription.medication }}</td>
+                        <td>{{ prescription.dosage }}</td>
+                        <td>{{ prescription.duration }} Days</td>
+                        <td>{{ prescription.instructions }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

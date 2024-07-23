@@ -154,7 +154,7 @@
           <th>Contacts</th>
            <th>Consultations</th>
           <td>Verification</td>
-          <td>Status</td>
+          <td>Active</td>
            <td>Actions</td>
           <th></th>
         </tr>
@@ -175,30 +175,30 @@
             <td>{{specialist.total_consultations}}</td>
            <td>
                 {% if specialist.verified %}
-                    <span class="text-success">Approved</span>
+                    <span class=""> <i class='ti ti-circle-check ti-sm text-success'></i></span>
                 {% else %}
-                    <span class="text-warning">Not Approved</span>
+                     <span class=""> <i class='ti ti-circle-x ti-sm text-danger'></i></span>
                 {% endif %}
            </td>
           <td>
-             {% if specialist.status == 'Active' %}
-                    <span class="badge bg-success">Active</span>
-                {% else %}
-                    <span class="badge bg-warning">In Active</span>
-                {% endif %}
+             {% if specialist.status %}
+                <span class=""> <i class='ti ti-circle-check ti-sm text-success'></i></span>
+            {% else %}
+               <span class=""> <i class='ti ti-circle-x ti-sm text-danger'></i></span>
+            {% endif %}
           </td>
              <td>
                <!-- Actions -->
                 {% if perms.room.edit_specialist %}
                     <a href="{% url 'app-asset-manager-specialist-verification-update' specialist.id %}" class="text-body">
                         {% if specialist.verified %}
-                            <button type="button" class="btn-sm rounded badge bg-warning">
-                                Disapprove
-                            </button>
+                            <span  class="btn-sm rounded-pill bg-warning py-1 px-2 text-white">
+                                rebut
+                            </span>
                         {% else %}
-                             <button type="button" class="btn-sm rounded badge bg-success">
-                                Approve
-                            </button>
+                             <span  class="btn-sm rounded-pill bg-primary py-1 px-2 text-white">
+                                verify
+                             </span>
                         {% endif %}
                     </a>
                 {% endif %}
@@ -227,6 +227,14 @@
             {% endfor %}
           </select>
         </div>
+         <div class="mb-3">
+          <label class="form-label" for="hospital">Hospital</label>
+          <select id="hospital" name="hospital" class="select2 form-select" required>
+            {% for hospital in hospitals %}
+              <option value="{{ hospital.hospital_id }}">{{ hospital.name|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
         <div class="mb-3">
           <label class="form-label" for="full_name">Full Name</label>
@@ -235,10 +243,6 @@
          <div class="mb-3">
          <label class="form-label" for="medical_license_number">Medical license number</label>
           <input type="text" class="form-control" id="medical_license_number"  name="medical_license_number" aria-label="Room Number" required/>
-        </div>
-         <div class="mb-3">
-       <label class="form-label" for="pricing">Pricing</label>
-          <input type="number" class="form-control" id="pricing"  name="pricing" aria-label="Room Number" required/>
         </div>
           <div class="mb-3">
             <label class="form-label" for="gender">Gender</label>

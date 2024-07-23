@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <title>Health360</title>
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1.0, user-scalable=0"
+         />
+      <!-- Favicons -->
+     <link
+      type="image/x-icon"
+      href="{% static 'img/logo/logo.png' %}"
+      rel="icon"
+    />
+      <!-- Bootstrap CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}"
+         />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <!-- Fontawesome CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+         />
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+         />
+      <!-- Main CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/style.css' %}"
+         />
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <nav class="navbar navbar-expand-lg header-nav">
+      <div class="navbar-header">
+         <a id="mobile_btn" href="javascript:void(0);">
+         <span class="bar-icon">
+         <span></span>
+         <span></span>
+         <span></span>
+         </span>
+         </a>
+         <a href="/" class="navbar-brand logo">
+         <img
+            src="{% static 'img/branding/logo.png' %}"
+            class="img-fluid"
+            alt="Logo"
+            width="50"
+            />
+         </a>
+      </div>
+      <div class="main-menu-wrapper">
+         <div class="menu-header">
+            <a href="#" class="menu-logo">
+            <img
+               src="{% static 'static/HealthStack-System/images/Normal/logo.jpg' %}"
+               class="img-fluid"
+               alt="Logo"
+               />
+            </a>
+            <a id="menu_close" class="menu-close" href="javascript:void(0);">
+            <i class="fas fa-times"></i>
+            </a>
+         </div>
+         <ul class="main-nav">
+            <li>
+               <a href="/" style="text-decoration: none;">Home</a>
+            </li>
+           <li>
+               <a href="{% url 'app-api-about' %}" style="text-decoration: none;">About Us</a>
+            </li>
+             <li>
+               <a href="{% url 'app-api-how-it-works' %}" style="text-decoration: none;">How it Works</a>
+            </li>
+           <li>
+               <a href="{% url 'app-api-contact' %}" style="text-decoration: none;">Contact Us</a>
+            </li>
+            {% if user_type == 'patient' %}
+            <li> <a href="{% url 'app-api-patient-dashboard' %} "style="text-decoration: none;">Patient Dashboard</a></li>
+            {% endif %}
+            {% if user_type == 'specialist' %}
+            <li> <a href="{% url 'app-api-doc-dashboard' %}" style="text-decoration: none;">Doctor Dashboard</a></li>
+            {% endif %}
+            <li class="login-link">
+               <a href="">Login / Signup</a>
+            </li>
+         </ul>
+      </div>
+      <ul class="nav header-navbar-rht">
+         <li class="nav-item contact-item">
+            <div class="header-contact-img">
+               <i class="far fa-hospital"></i>
+            </div>
+            <div class="header-contact-detail">
+               <p class="contact-header">Contact</p>
+               <p class="contact-info-header">+254 14272921</p>
+            </div>
+         </li>
+         {% if user.is_authenticated %}
+         <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+               {% csrf_token %}
+               <button class="btn btn-primary d-grid w-100" type="submit">Logout</button>
+            </form>
+         </li>
+         {% else %}
+         <li class="nav-item">
+            <a class="nav-link header-login" href="{% url 'app-api-patient-login'%}"
+               >Login / Signup
+            </a>
+         </li>
+         {% endif %}
+      </ul>
+   </nav>
+   {% include 'message.html' %}
+   <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+   <!-- Bootstrap Core JS -->
+   <script src="{% static 'HealthStack-System/js/Normal/popper.min.js' %}"></script>
+   <script src="{% static 'HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+   <!-- Custom JS -->
+   <!-- <script src="{% static 'HealthStack-System/js/Normal/script.js' %}"></script> -->
+   <script src="{% static 'HealthStack-System/Outside_assets/js/script.js' %}"></script>
+   <script src="{% static 'HealthStack-System/js/Normal/Checkbox.js' %}"></script>
+
+
+   <!-- and at the end:-->
+
+</html>

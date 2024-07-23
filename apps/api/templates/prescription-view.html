@@ -1,0 +1,184 @@
+{% load static %}
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1.0, user-scalable=0"
+         />
+      <title>HealthStack</title>
+      <!-- Favicons -->
+      <link
+         type="image/x-icon"
+         href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}"
+         rel="icon"
+         />
+      <!-- Bootstrap CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}"
+         />
+      <!-- Fontawesome CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+         />
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+         />
+      <!-- Main CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/style.css' %}"
+         />
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <!-- Main Wrapper -->
+      <div class="main-wrapper">
+         <!-- Header -->
+         <!-- /Header -->
+         <!-- Breadcrumb -->
+        {% include 'patient-navbar.html' %}
+         <!-- /Breadcrumb -->
+         <!-- Page Content -->
+         <div class="content">
+            <div class="container-fluid">
+               <div class="row">
+                  <!-- Profile Sidebar -->
+                  <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                     <div>
+                        {% include 'patient-widget.html' %}
+                     </div>
+                  </div>
+                  <!-- / Profile Sidebar -->
+                  <div class="col-md-7 col-lg-6 col-xl-9">
+                     <div class="invoice-content">
+                        <div class="invoice-item">
+                           <div class="row">
+                              <div class="col-md-6">
+                                 <div class="invoice-logo">
+                                    <img  src="{% static 'img/logo/logo.png' %}" alt="logo">
+                                 </div>
+                              </div>
+                              <div class="col-md-6">
+                                 <p class="invoice-details">
+                                    <strong>Date:</strong> {{prescription.updated_at }}
+                                 </p>
+                                 <hr/>
+                              </div>
+                           </div>
+                           <!-- Invoice Item -->
+                           <div class="invoice-item">
+                              <div class="row">
+                                 <div class="col-md-6">
+                                    <div class="invoice-info">
+                                       <strong class="customer-text">Doctor Information</strong>
+                                       <table class="table table-borderless" style="font-size: 14px">
+                                          <tr>
+                                             <th>Name:</th>
+                                             <td>{{ prescription.consultation.appointment.specialist.full_name }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Hospital:</th>
+                                             <td>{{ hospital }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Department:</th>
+                                             <td>{{ prescription.consultation.appointment.specialist.category }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Email:</th>
+                                             <td>{{ prescription.consultation.appointment.specialist.contact_email }}</td>
+                                          </tr>
+                                       </table>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                    <div class="invoice-info">
+                                       <strong class="customer-text">Patient Information</strong>
+                                       <table class="table table-borderless" style="font-size: 14px">
+                                          <tr>
+                                             <th>Name:</th>
+                                             <td>{{ prescription.consultation.appointment.patient.full_name }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Email:</th>
+                                             <td>{{ prescription.consultation.appointment.patient.contact_email }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Phone Number:</th>
+                                             <td>{{ prescription.consultation.appointment.patient.contact_phone }}</td>
+                                          </tr>
+                                          <tr>
+                                             <th>Age:</th>
+                                             <td>{{ age }}</td>
+                                          </tr>
+                                       </table>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- /Invoice Item -->
+                           <!-- Invoice Item -->
+                           <div class="invoice-item invoice-table-wrap mt-3">
+                              <div class="row">
+                                 <div class="col-md-12">
+                                    <hr>
+                                    <h2 class="mb-4" style="color: rgb(84, 147, 199)"><b>Diagnosis</b></h2>
+                                    <hr>
+                                    <p>{{prescription.consultation.diagnosis|linebreaks}}</p>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="invoice-item invoice-table-wrap mt-4">
+                              <div class="row">
+                                 <div class="col-md-12">
+                                    <hr>
+                                    <h2 class="mb-4" style="color:rgb(84, 147, 199)"><b>Prescription</b></h2>
+                                    <hr>
+                                    <table class="table table-borderless" style="font-size: 17px">
+                                       <tr>
+                                          <th>Medication:</th>
+                                          <th>Dosage:</th>
+                                          <th>Duration:</th>
+                                          <th>Instructions</th>
+                                       </tr>
+                                       <tr>
+                                          <td>{{ prescription.medication }}</td>
+                                          <td>{{ prescription.dosage }}</td>
+                                          <td>{{ prescription.duration }} Days</td>
+                                          <td>{{ prescription.instructions }}</td>
+                                       </tr>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- /Invoice Item -->
+                           <hr class="py-3"/>
+                           <button class="btn btn-md bg-info ">
+                           <a target="_blank" href="{% url 'app-api-prescription-generate_pdf' prescription.id %}">
+                           Download
+                           </a>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- jQuery -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+      <!-- Bootstrap Core JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+      <!-- Custom JS -->
+      <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+   </body>
+</html>

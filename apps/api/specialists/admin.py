@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import SpecialistCategory, Specialist, SpecialistFeedback, Appointment, CommonConsultation, Transaction, \
-    Diagnosis, Prescription
+    Prescription, Hospital
 
 
 @admin.register(SpecialistCategory)
@@ -16,8 +16,8 @@ class SpecialistAdmin(admin.ModelAdmin):
     list_filter = ('gender', 'category', 'status')
 
 admin.site.register(CommonConsultation)
+admin.site.register(Hospital)
 admin.site.register(Appointment)
-admin.site.register(Diagnosis)
 admin.site.register(Prescription)
 admin.site.register(Transaction)
 admin.site.register(SpecialistFeedback)

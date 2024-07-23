@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health360</title>
+    <link href="{% static 'static/HealthStack-System/css/Normal/style.css' %}" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar -->
+<div class="breadcrumb-bar">
+    <div class="container-fluid py-0">
+        <div class="row align-items-center">
+            <div class="col-md-10 col-10">
+                <nav aria-label="row breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item text-muted">
+                            <a class="text-muted display-10" href="/">Home</a>
+                        </li>
+                        <li aria-current="page" class="breadcrumb-item">
+                            <a class="text-muted" href="{% url 'app-api-patient-dashboard' %}">Patient Dashboard</a>
+                        </li>
+                    </ol>
+                </nav>
+              <h2 class="breadcrumb-title">{{ patient.full_name }}</h2>
+            </div>
+            <div class="col-md-2 col-2 text-right">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-white dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          {% if patient.profile_picture %}
+                            <img src="{{ patient.profile_picture.url }}" class="avatar img-fluid rounded-circle mr-1" alt="Avatar" style="width: 20px; height: 20px">
+                           {% else %}
+                          <img src="{% static 'static/images/doctors/user-default.png' %}" alt class="h-auto rounded-circle" style="width: 20px; height: 20px">
+                          {% endif %}
+                            <span class="text-white font-weight-bold" style="font-size: 12px">{{ patient.user }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                             {% if request.user.is_authenticated and request.user.profile.is_verified %}
+                                <span class="dropdown-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <i class='ti ti-user-circle me-2 ti-sm'></i>
+                                        <span class="align-middle">Verified</span>
+                                    </span>
+                                    <span class="text-success"><i class='fa fa-check-circle text-success'></i></span>
+                                </span>
+                            {% else %}
+                                <a class="dropdown-item d-flex justify-content-between align-items-center" href="{% url 'verify-email-page' %}">
+                                    <span>
+                                        <i class='fa fa-times-circle me-2 text-danger'></i>
+                                        <span class="align-middle">Not Verified</span>
+                                    </span>
+                                    <span class="text-danger"><i class='ti ti-circle-x ti-sm'></i></span>
+                                </a>
+                            {% endif %}
+                            <a class="dropdown-item" href="/">Home</a>
+                            <a class="dropdown-item" href="{% url 'app-api-patient-dashboard' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'app-api-patient-update' patient.id %}">Settings</a>
+                          <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link p-0" style="font-size: 14px">Log Out</button>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <form id="notificationsForm" action="{% url 'app-api-patient-dashboard' %}" method="post" class="">
+                            {% csrf_token %}
+                            <button id="notificationsButton" class="nav-link text-white" style="background: transparent; border: none; font-size: 17px" type="button">
+                                <i class="fa fa-bell text-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                <span class="badge badge-danger position-absolute" style="margin-left: -6px; margin-top: -5px; border-radius: 20px; font-size: 12px;">
+                                        {{ not_count }}
+                                </span>
+                            </button>
+                        </form>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown" id="notificationsDropdown">
+                            <div class="notification-modal">
+                                {% if patient %}
+                                    {% for notification in notifications %}
+                                        <p class="dropdown-item p-2">
+                                            <div class="notification-item">
+                                                <div class="font-weight-bold">{{ notification.subject }}</div>
+                                                <div class="notification-message">{{ notification.message|linebreaks|urlize }}</div>
+                                                <div class="notification-timestamp text-muted">{{ notification.timestamp }}</div>
+                                            </div>
+                                        </p>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Navbar -->
+
+<!-- jQuery and Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // When notifications button is clicked
+        $('#notificationsButton').click(function() {
+            // Toggle visibility of notifications dropdown
+            $('#notificationsDropdown').toggleClass('show');
+
+            // Submit the form asynchronously using AJAX
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'app-api-patient-dashboard' %}',
+                data: $('#notificationsForm').serialize(),
+                success: function(response) {
+                    // Optionally handle success response
+                    console.log('Notifications marked as read');
+                },
+                error: function(xhr, status, error) {
+                    // Optionally handle error
+                    console.error('Error marking notifications as read:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Other scripts and closing body and html tags -->
+</body>
+</html>

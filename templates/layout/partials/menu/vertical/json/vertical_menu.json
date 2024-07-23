@@ -99,14 +99,6 @@
        "permission": "roles.view_roles",
       "slug": "app-asset-manager-roles"
 
-    },
-
-    {
-      "url": "auth-reset-password-basic",
-      "name": "Reset Password",
-      "icon": "menu-icon tf-icons ti ti-key",
-      "slug": "auth-reset-password-basic"
-
     }
 
   ]

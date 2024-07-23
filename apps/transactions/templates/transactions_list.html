@@ -157,9 +157,9 @@
             <div class="d-flex align-items-center gap-3">
               <!-- permission required: edit_transaction -->
              {% if perms.transactions.pay_transaction %}
-             {% if transaction.status != 'Paid' %}
-              <a href="{% url 'transactions-pay' transaction.id %}" class="text-body"><i class='ti ti-wallet ti-sm'></i></a>
-              {% endif %} {% endif %}
+<!--             {% if transaction.status != 'Paid' %}-->
+<!--              <a href="{% url 'transactions-pay' transaction.id %}" class="text-body"><i class='ti ti-wallet ti-sm'></i></a>-->
+<!--              {% endif %} --> {% endif %}
               {% if perms.transactions.edit_transaction %}
               <a href="{% url 'transactions-update' transaction.id %}" class="text-body"><i class='ti ti-edit ti-sm'></i></a>
               {% endif %}

@@ -1,0 +1,33 @@
+<!-- Profile Widget -->
+<div class="card widget-profile pat-widget-profile h-100">
+   <div class="card-body">
+      <div class="pro-widget-content">
+         <div class="profile-info-widget">
+            <a href="#" class="booking-doc-img">
+             {% if patient.profile_picture %}
+                            <img src="{{ patient.profile_picture.url }}" class="avatar img-fluid rounded-circle mr-1" alt="Avatar">
+                           {% else %}
+                          <img src="{% static 'static/images/doctors/user-default.png' %}">
+                          {% endif %}
+            </a>
+            <div class="profile-det-info">
+               <h3><a href="#">{{patient.full_name}}</a></h3>
+               <div class="patient-details">
+                  <h4 class="font-weight-bold"> {{ patient.total_consultations }} </h4>
+                  <p class="text-muted">Consultations</p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="patient-info">
+         <ul>
+            <li>Name <span>{{patient.full_name}}</span></li>
+            <li>DOB <span>{{patient.date_of_birth}}</span></li>
+            <li>Phone <span>{{patient.contact_phone}}</span></li>
+            <div class="nav-link mt-4 text-left" style="margin-left: -17px; color-primary">
+            </div>
+         </ul>
+      </div>
+   </div>
+</div>
+<!-- /Profile Widget -->

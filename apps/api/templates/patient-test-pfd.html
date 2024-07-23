@@ -1,0 +1,147 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+    <title> A Test report for {{patient.full_name}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+        .main-wrapper {
+            padding: 10px;
+        }
+        .invoice-item {
+            margin-bottom: 20px;
+        }
+        .invoice-info {
+            margin-bottom: 20px;
+        }
+        .invoice-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-info th, .invoice-info td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            vertical-align: top; /* Ensures top alignment */
+        }
+         .invoice-info td {
+            padding-left: 10px;
+        }
+        .invoice-info th {
+            background-color: #f9f9f9;
+        }
+        .invoice-logo img {
+            max-width: 100px;
+        }
+        .invoice-details {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            color: rgb(84, 147, 199);
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: rgb(84, 147, 199);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <h1>Patient Test Report</h1> <!-- Report Title -->
+        <div class="content">
+            <div class="invoice-item">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="invoice-logo">
+                        <img src="{% static 'img/logo/logo.png' %}" alt="logo">
+                    </div>
+                    <div class="invoice-details">
+                        <p><strong>Date:</strong> {{ test.ordered_date }}</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+
+            <div class="invoice-item">
+                <div style="display: flex; justify-content: space-between;">
+                    <div class="invoice-info">
+                        <strong style="font-size: 16px; color: rgb(84, 147, 199);">Hospital Info</strong>
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ hospital.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type</th>
+                                <td>{{ hospital.hospital_type }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{ hospital.address }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact</th>
+                                <td>{{ hospital.email }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="invoice-info">
+                        <strong style="font-size: 16px; color: rgb(84, 147, 199);">Patient Information</strong>
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ appointment.patient.full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Age</th>
+                                <td>{{ age }} Yrs</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ appointment.patient.contact_email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone Number</th>
+                                <td>{{ appointment.patient.contact_phone }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-item">
+                <h2>Test Report</h2>
+                <hr/>
+                <table>
+                    <tr style="background-color: #f9f9f9;">
+                        <th>Test Name</th>
+                        <th>Test Results</th>
+                        <th>Completed Date</th>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td>{{ test.test_name }}</td>
+                        <td>{{ test.results }}</td>
+                        <td>{{ test.completed_date }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

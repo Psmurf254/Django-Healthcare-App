@@ -3,7 +3,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Specialist{% endblock title %}
+{% block title %}Specialist Update{% endblock title %}
 
 {% block vendor_css %}
 {{ block.super }}
@@ -46,6 +46,14 @@
           {% endfor %}
         </select>
       </div>
+       <div class="mb-3">
+        <label class="form-label" for="hospital">Hospital </label>
+        <select id="hospital" name="hospital" class="select2 form-select" required>
+          {% for hospital in hospitals %}
+            <option value="{{ hospital.hospital_id }}" {% if hospital.hospital_id == specialist.hospital.hospital_id %}selected{% endif %}>{{ hospital.name|upper }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
       <div class="mb-3">
         <label class="form-label" for="full_name">Full Name</label>
@@ -80,11 +88,6 @@
       <div class="mb-3">
         <label class="form-label" for="medical_license_number">Medical License Number</label>
         <input type="text" class="form-control" id="medical_license_number" name="medical_license_number" value="{{ specialist.medical_license_number }}" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label" for="pricing">Pricing</label>
-        <input type="number" step="0.01" class="form-control" id="pricing" name="pricing" value="{{ specialist.pricing }}" required/>
       </div>
 
       <div class="mb-3">

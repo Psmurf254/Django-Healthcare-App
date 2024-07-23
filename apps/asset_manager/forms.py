@@ -5,7 +5,7 @@ from django.utils import timezone
 from apps.api.patients.models import Patient
 from apps.api.info.models import Notification, About, Contact, FAQ
 from apps.api.specialists.models import SpecialistCategory, Specialist, SpecialistFeedback, Appointment, \
-    CommonConsultation
+    CommonConsultation, Test
 
 
 class PatientForm(forms.ModelForm):
@@ -18,6 +18,12 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = SpecialistCategory
         exclude = ['total_specialists']
+
+
+class ApiSpecialistForm(forms.ModelForm):
+    class Meta:
+        model = Specialist
+        fields = '__all__'
 
 
 class SpecialistForm(forms.ModelForm):
@@ -36,6 +42,10 @@ class SpecialistForm(forms.ModelForm):
 
         ]
 
+class APISpecialistUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Specialist
+        fields = '__all__'
 
 class SpecialistUpdateForm(forms.ModelForm):
     class Meta:
@@ -55,11 +65,10 @@ class SpecialistUpdateForm(forms.ModelForm):
         ]
 
 
-
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = SpecialistFeedback
-        exclude = '__all__'
+        exclude = ['patient']
 
 
 class AppointmentForm(forms.ModelForm):
@@ -102,6 +111,18 @@ class FAQForm(forms.ModelForm):
     class Meta:
         model = FAQ
         exclude = '__all__'
+
+
+class TestOrderForm(forms.ModelForm):
+    class Meta:
+        model = Test
+        fields = ['test_name']
+
+
+class TestResultForm(forms.ModelForm):
+    class Meta:
+        model = Test
+        fields = ['results']
 
 
 class RoleForm(forms.ModelForm):

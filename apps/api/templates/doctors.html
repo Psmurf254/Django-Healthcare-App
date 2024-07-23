@@ -1,0 +1,111 @@
+{% load static %}
+ <header class="header">
+ {% include 'main-navbar.html'%}
+ </header>
+<!-- Hero Start -->
+<div class="container-fluid  py-5 hero-header mb-3" style="background-color:rgb(172, 209, 242)">
+   <div class="row py-3">
+      <div class="col-12 text-center">
+         <h1 class="display-3  animated zoomIn">{{category.name}}</h1>
+         <p class="my-2 text-muted">{{category.description}}</p>
+        <a href="/" class="h4 mt-3 " style="text-decoration: none">Home</a>
+         <i class="far fa-circle text-white px-2"></i>
+         <a href="#" class="h4" style="text-decoration: none">Doctors List</a>
+      </div>
+
+   </div>
+</div>
+<!-- Hero End -->
+
+ <section class="section section-doctor">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="section-header">
+                <h2>Our Doctors </h2>
+                <p>From the Best</p>
+              </div>
+              <div class="about-content">
+                <p>
+                Meet Our Certified & Experienced {{category.name}} Professionals</h1>
+                </p>
+
+              </div>
+            </div>
+
+
+            <div class="col-lg-8">
+              <div class="doctor-slider slider">
+
+                {% for doctor in specialists %}
+                <!-- Doctor Widget -->
+                <div class="profile-widget" style="height: 60vh">
+                  <div class="doc-img position-relative">
+                    <a href="{% url 'app-api-doc-details' doctor.id%}" style="text-decoration: none">
+                      {% if doctor.profile_picture %}
+                      <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{{ doctor.profile_picture.url }}"
+                        style="height: 60%"
+                      >
+                      {% else %}
+                       <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{% static 'static/HealthStack-System/images/Normal/pppp.jpg' %}"
+                      />
+                      {% endif %}
+                    </a>
+                  </div>
+                  <div class="pro-content text-center">
+                    <h3 class="title">
+                     <a href="{% url 'app-api-doc-details' doctor.id%}" style="text-decoration: none">{{doctor.full_name}}</a>
+                    </h3>
+                    <p class="speciality">
+                      {{ doctor.category }}
+                    </p>
+                     <div class="position-absolute mt-3 start-50 translate-middle bg-light rounded p-2 d-flex" style="z-index: 1">
+                     {% if doctor.whatsApp %}
+                     <a class="btn btn-primary btn-square m-1" href="{{ doctor.whatsApp }}"><i class="fab fa-whatsapp fw-normal"></i></a>
+                     {% endif %}
+                     {% if doctor.x %}
+                     <a class="btn btn-primary btn-square m-1" href="{{ doctor.x }}"><i class="fab fa-twitter fw-normal"></i></a>
+                     {% endif %}
+                     {% if doctor.facebook %}
+                     <a class="btn btn-primary btn-square m-1" href="{{ doctor.facebook }}"><i class="fab fa-facebook-f fw-normal"></i></a>
+                     {% endif %}
+                     {% if doctor.instagram %}
+                     <a class="btn btn-primary btn-square m-1" href="{{ doctor.instagram }}"><i class="fab fa-instagram fw-normal"></i></a>
+                     {% endif %}
+                     {% comment %}
+                     Add more social media links as needed following the same pattern
+                     {% endcomment %}
+                  </div>
+                  </div>
+                </div>
+                <!-- /Doctor Widget -->
+                {% endfor %}
+
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+{% include 'footer.html' %}
+ <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+    />
+
+    <!-- Slick JS -->
+    <script src="{% static 'static/HealthStack-System/Outside_assets/js/slick.js' %}"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+<!-- Team End -->
+

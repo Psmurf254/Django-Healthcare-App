@@ -1,0 +1,82 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+
+<div class="container-fluid bg-white bg-appointment mb-5 wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 20px; min-height: 90vh;">
+    <div class="container py-5">
+        <h1 class="text-center mb-5">How It Works</h1>
+        <div class="row g-4">
+            <!-- Step 1 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/girl-with-laptop.png' %}" alt="Sign Up" class="img-fluid" style="width: 50px;">
+                    </div>
+                    <h4 class="text-primary">Sign Up</h4>
+                    <p class="text-muted">Register as a patient or a specialist with your basic details to get started.</p>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/girl-verify-password-dark.png' %}" alt="Sign Up" class="img-fluid" style="width: 75px;">
+                    </div>
+                    <h4 class="text-primary">Search for a Doctor</h4>
+                    <p class="text-muted">Find the right specialist by searching through our extensive list of registered professionals.</p>
+                </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/girl-with-laptop-dark.png' %}" alt="Book Appointment" class="img-fluid" style="width: 75px;">
+                    </div>
+                    <h4 class="text-primary">Book an Appointment</h4>
+                    <p class="text-muted">Schedule an appointment with your chosen doctor at a convenient time.</p>
+                </div>
+            </div>
+            <!-- Step 4 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/boy-with-rocket-dark.png' %}" alt="Consultation" class="img-fluid" style="width: 75px;">
+                    </div>
+                    <h4 class="text-primary">Consultation</h4>
+                    <p class="text-muted">Attend your consultation online or visit the hospital as per the appointment details.</p>
+                </div>
+            </div>
+            <!-- Step 5 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/card-advance-sale.png' %}" alt="Tests" class="img-fluid" style="width: 50px;">
+                    </div>
+                    <h4 class="text-primary">Tests and Diagnosis</h4>
+                    <p class="text-muted">If required, undergo tests as prescribed by your doctor.</p>
+                </div>
+            </div>
+            <!-- Step 6 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/bulb-dark.png' %}" alt="Results" class="img-fluid" style="width: 50px;">
+                    </div>
+                    <h4 class="text-primary">Get Results</h4>
+                    <p class="text-muted">Receive your test results online and discuss them with your doctor.</p>
+                </div>
+            </div>
+            <!-- Step 7 -->
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="h-100 p-4 border rounded shadow-sm">
+                    <div class="icon-box mb-3">
+                        <img src="{% static 'img/illustrations/boy-verify-email-dark.png' %}" alt="Prescription" class="img-fluid" style="width: 75px;">
+                    </div>
+                    <h4 class="text-primary">Receive Prescription</h4>
+                    <p class="text-muted">Get your prescription from your doctor based on the consultation and test results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

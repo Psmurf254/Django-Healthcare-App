@@ -1,0 +1,406 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <!-- doccure/doctor-profile.html  30 Nov 2019 04:12:16 GMT -->
+   <head>
+      <meta charset="utf-8">
+      <title>HealthStack</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+      <!-- Favicons -->
+      <link type="image/x-icon" href=" {% static 'static/HealthStack-System/images/Normal/favicon.png' %}" rel="icon">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}">
+      <!-- Fontawesome CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}">
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}">
+      <!-- Fancybox CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fancybox/jquery.fancybox.min.css'%}">
+      <!-- Main CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/style.css' %}">
+      <style>
+         th, td {
+         border: 1px solid white;
+         border-radius: 10px;
+         /* #96D4D4 */
+         background-color: #b3eafc;
+         height: 50px;
+         color: black;
+         width: 1000px;
+         text-align: center;
+         }
+      </style>
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <!-- Main Wrapper -->
+      <div class="main-wrapper">
+      <!-- Header -->
+      <header class="header">
+         {% include 'main-navbar.html' %}
+      </header>
+      <!-- /Header -->
+      <!-- Page Content -->
+      <div class="content">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                <div>
+                  <div class="widget about-widget bg-white px-2" style="min-height: 100vh">
+                     <h4 class="widget-title pt-3 px-3">{{hospital.name}} Doctors</h4>
+                    {% for specialist in specialists %}
+                    <div class="profile-sidebar h-100">
+                      <div class="widget-profile pro-widget-content">
+                        <div class="profile-info-widget">
+                          <a href="#" class="booking-doc-img">
+                             {% if specialist.profile_picture %}
+                            <img
+                              src="{{ specialist.profile_picture.url }}"
+                              alt="User Image"
+                            />
+                            {% else %}<img src="{% static 'static/images/doctors/user-default.png' %}">{% endif %}
+                          </a>
+                          <div class="profile-det-info">
+                            <h3>{{ specialist.full_name }}</h3>
+                              <h5 class="mt-1 text-muted">{{ specialist.category }}</h5>
+                             <div class="mt-3">
+                               <a class="btn-primary pb-2 px-3 text-decoration-none text-center text-uppercase rounded" href="{% url 'app-api-doc-details' specialist.id%}">View Profile</a>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr/>
+                    {% endfor %}
+                    </div>
+                    </div>
+                  <!-- /Profile Sidebar -->
+               </div>
+               <div class="col-md-7 col-lg-8 col-xl-9">
+                  <div class="card">
+                     <div class="card-body">
+                        <div class="doctor-widget">
+                           <div class="doc-info-left">
+                              <div class="row">
+                                 <div class="col-lg-6 col-md-6" style=" display: flex;justify-content: left;width: 65%;">
+                                    <div class="doctor-img">
+                                       <img src="{{hospital.featured_image.url}}" style="height: 250px; width: 280px; margin: auto; " alt="User Image">
+                                    </div>
+                                 </div>
+                                 <div class="doc-info-cont col-md-6 col-lg-8">
+                                    <div class="clinic-details">
+                                       <ul class="clinic-gallery mt-3">
+                                          <li>
+                                             <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-01.jpg'%}" data-fancybox="gallery">
+                                             <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-01.jpg'%}" alt="Feature">
+                                             </a>
+                                          </li>
+                                          <li>
+                                             <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-02.jpg'%}" data-fancybox="gallery">
+                                             <img  src="{% static 'static/HealthStack-System/images/Normal/features/feature-02.jpg'%}" alt="Feature">
+                                             </a>
+                                          </li>
+                                          <li>
+                                             <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-03.jpg'%}" data-fancybox="gallery">
+                                             <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-03.jpg'%}" alt="Feature">
+                                             </a>
+                                          </li>
+                                          <li>
+                                             <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-04.jpg'%}" data-fancybox="gallery">
+                                             <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-04.jpg'%}" alt="Feature">
+                                             </a>
+                                          </li>
+                                       </ul>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="doc-info-right col-md-6" >
+                              <div class="clini-infos">
+                                 <ul>
+                                    <li><i class="far fa-user"></i> {{hospital.name}}</li>
+                                    <li><i class="far fa-comment"></i> {{hospital.hospital_type}} Hospital</li>
+                                    <li><i class="fas fa-map-marker-alt"></i> {{hospital.address}}</li>
+                                 </ul>
+                              </div>
+                             <div class="clinic-services">
+                                 <span>children special</span>
+                             </div>
+                              <br>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /Doctor Widget -->
+                  <!-- Doctor Details Tab -->
+                  <div class="card">
+                     <div class="card-body pt-0">
+                        <!-- Tab Menu -->
+                        <nav class="user-tabs mb-4">
+                           <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                              <li class="nav-item">
+                                 <a class="nav-link active" href="#doc_overview" data-toggle="tab">Overview</a>
+                              </li>
+                              <li class="nav-item">
+                                 <a class="nav-link" href="#doc_locations" data-toggle="tab">Locations and Contact</a>
+                              </li>
+                              <li class="nav-item">
+                                 <a class="nav-link" href="#doc_emergency" data-toggle="tab">Emergency Info</a>
+                              </li>
+                           </ul>
+                        </nav>
+                        <!-- /Tab Menu -->
+                        <!-- Tab Content -->
+                        <div class="tab-content pt-0">
+                           <!-- Overview Content -->
+                           <div role="tabpanel" id="doc_overview" class="tab-pane fade show active">
+                              <div class="row">
+                                 <div class="col-md-12 col-lg-9">
+                                    <!-- About Details -->
+                                    <div class="widget about-widget">
+                                       <h4 class="widget-title">About Our Hospital</h4>
+                                       <p>{{hospital.description}}</p>
+                                    </div>
+                                    <!-- /About Details -->
+                                    <!-- Awards Details -->
+                                    <div class="widget awards-widget">
+                                       <h4 class="widget-title">Departments</h4>
+                                       <div class="experience-box">
+                                          <ul class="experience-list">
+                                             <li>
+                                                <div class="experience-user">
+                                                   <div class="before-circle"></div>
+                                                </div>
+                                                <div class="experience-content">
+                                                   <div class="timeline-content">
+                                                      <h4 class="exp-title">{{hospital.departments|linebreaks}}</h4>
+                                                   </div>
+                                                </div>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                    <!-- /Awards Details -->
+                                    <!-- Services List -->
+                                    <div class="service-list">
+                                       <h4>Services</h4>
+                                       <ul class="clearfix">
+                                          <li>{{hospital.services|linebreaks}}</li>
+
+                                       </ul>
+                                    </div>
+                                    <!-- /Services List -->
+                                    <!-- Specializations List -->
+                                    <div class="service-list">
+                                       <h4>Specializations</h4>
+                                       <ul class="clearfix">
+                                          <li>{{hospital.specializations|linebreaks}}</li>
+
+                                       </ul>
+                                    </div>
+                                    <!-- /Specializations List -->
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- /Overview Content -->
+                           <!-- Locations Content -->
+                           <div role="tabpanel" id="doc_locations" class="tab-pane fade">
+                              <!-- Location List -->
+                              <div class="location-list">
+                                 <div class="row">
+                                    <!-- Clinic Content -->
+                                    <div class="col-md-4">
+                                       <div class="clinic-content">
+                                          <h4 class="clinic-name">{{hospital.name}}</h4>
+                                          <p class="doc-speciality">{{hospital.hospital_type}}</p>
+                                          <div class="clinic-details mb-0">
+                                             <h5 class="clinic-direction"> <i class="fas fa-map-marker-alt"></i> {{hospital.address}} <br><a href="javascript:void(0);">Get Directions</a></h5>
+                                             <ul>
+                                                <li>
+                                                   <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-01.jpg' %}" data-fancybox="gallery2">
+                                                   <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-01.jpg' %}" alt="Feature Image">
+                                                   </a>
+                                                </li>
+                                                <li>
+                                                   <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-02.jpg' %}" data-fancybox="gallery2">
+                                                   <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-02.jpg' %}" alt="Feature Image">
+                                                   </a>
+                                                </li>
+                                                <li>
+                                                   <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-03.jpg' %}" data-fancybox="gallery2">
+                                                   <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-03.jpg' %}" alt="Feature Image">
+                                                   </a>
+                                                </li>
+                                                <li>
+                                                   <a href="{% static 'static/HealthStack-System/images/Normal/features/feature-04.jpg' %}" data-fancybox="gallery2">
+                                                   <img src="{% static 'static/HealthStack-System/images/Normal/features/feature-04.jpg' %}" alt="Feature Image">
+                                                   </a>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <!-- /Clinic Content -->
+                                    <!-- Clinic Timing -->
+                                    <div class="col-md-4">
+                                       <div class="clinic-timing">
+                                          <div>
+                                             <p class="timings-days">
+                                                <span> Emails </span>
+                                             </p>
+                                             <p class="timings-times">
+                                                <span>{{hospital.email}}</span>
+                                                <!-- <span>care@gmail.com</span> -->
+                                             </p>
+                                          </div>
+                                          <div>
+                                             <p class="timings-days">
+                                                <span>Contact</span>
+                                             </p>
+                                             <p class="timings-times">
+                                                <span>{{hospital.phone_number}}</span>
+                                             </p>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <!-- /Clinic Timing -->
+                                 </div>
+                              </div>
+                              <!-- /Location List -->
+                           </div>
+                           <!-- /Locations Content -->
+                           <!-- Overview Content -->
+                           <div role="tabpanel" id="doc_emergency" class="tab-pane fade show">
+                              <div class="row">
+                                 <div class="col-md-12 col-lg-12">
+                                    <Table>
+                                       <tr>
+                                          <td><b>General Bed</b></td>
+                                          <td>{{hospital.general_bed_no}}</td>
+                                       </tr>
+                                       <tr>
+                                          <td><b>Regular Cabin</b></td>
+                                          <td>{{hospital.regular_cabin_no}}</td>
+                                       </tr>
+                                       <tr>
+                                          <td><b>ICU</b></td>
+                                          <td>{{hospital.available_icu_no}}</td>
+                                       </tr>
+                                       <tr>
+                                          <td><b>Emergency Cabin</b></td>
+                                          <td>{{hospital.emergency_cabin_no}}</td>
+                                       </tr>
+                                       <tr>
+                                          <td><b>VIP room</b></td>
+                                          <td>{{hospital.vip_cabin_no}}</td>
+                                       </tr>
+                                    </Table>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- /Overview Content -->
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- Doctor Widget -->
+               <!-- /Doctor Details Tab -->
+            </div>
+         </div>
+         <!-- /Page Content -->
+         <!-- Footer -->
+         {% include 'footer.html' %}
+         <!-- /Footer -->
+      </div>
+      <!-- /Main Wrapper -->
+      <!-- <div class="modal fade" id="edit_more_details" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+         	<div class="modal-header">
+         	  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+         	  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         		<span aria-hidden="true">&times;</span>
+         	  </button>
+         	</div>
+         	<div class="modal-body">
+         	  ...
+         	</div>
+         	<div class="modal-footer">
+         	  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         	  <button type="button" class="btn btn-primary">Save changes</button>
+         	</div>
+           </div>
+         </div>
+          </div> -->
+      <!-- Voice Call Modal -->
+      <!-- <div class="modal fade call-modal" id="voice_call">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+         	<div class="modal-content">
+         		<div class="modal-body">
+
+         			<div class="call-box incoming-box">
+         				<div class="call-wrapper">
+         					<div class="call-inner">
+         						<div class="call-user">
+         							<img alt="User Image" src="assets/img/doctors/doctor-thumb-02.jpg" class="call-avatar">
+         							<h4>Dr. Darren Elder</h4>
+         							<span>Connecting...</span>
+         						</div>
+         						<div class="call-items">
+         							<a href="javascript:void(0);" class="btn call-item call-end" data-dismiss="modal" aria-label="Close"><i class="material-icons">call_end</i></a>
+         							<a href="voice-call.html" class="btn call-item call-start"><i class="material-icons">call</i></a>
+         						</div>
+         					</div>
+         				</div>
+         			</div>
+
+
+         		</div>
+         	</div>
+         </div>
+         </div> -->
+      <!-- /Voice Call Modal -->
+      <!-- Video Call Modal -->
+      <!-- <div class="modal fade call-modal" id="video_call">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+         	<div class="modal-content">
+         		<div class="modal-body">
+
+
+         			<div class="call-box incoming-box">
+         				<div class="call-wrapper">
+         					<div class="call-inner">
+         						<div class="call-user">
+         							<img class="call-avatar" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
+         							<h4>Dr. Darren Elder</h4>
+         							<span>Calling ...</span>
+         						</div>
+         						<div class="call-items">
+         							<a href="javascript:void(0);" class="btn call-item call-end" data-dismiss="modal" aria-label="Close"><i class="material-icons">call_end</i></a>
+         							<a href="video-call.html" class="btn call-item call-start"><i class="material-icons">videocam</i></a>
+         						</div>
+         					</div>
+         				</div>
+         			</div>
+
+
+         		</div>
+         	</div>
+         </div>
+         </div> -->
+      <!-- Video Call Modal -->
+      <!-- jQuery -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+      <!-- Bootstrap Core JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+      <!-- Fancybox JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/fancybox/jquery.fancybox.min.js'%}"></script>
+      <!-- Custom JS -->
+      <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+   </body>
+   <!-- doccure/doctor-profile.html  30 Nov 2019 04:12:16 GMT -->
+</html>

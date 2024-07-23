@@ -1,0 +1,306 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=0" name="viewport" />
+  <title>Health360</title>
+  <!-- Favicons -->
+  <link href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}" rel="icon" type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}" rel="stylesheet" />
+  <!-- Fontawesome CSS -->
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+    rel="stylesheet" />
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}" rel="stylesheet" />
+  <!-- Main CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/style.css' %}" rel="stylesheet" />
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="{% static 'static/HealthStack-System/js/Normal/html5shiv.min.js' %}"></script>
+  <script src="{% static 'static/HealthStack-System/js/Normal/respond.min.js' %}"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <!-- Breadcrumb -->
+    {% include 'patient-navbar.html' %}
+    <!-- /Breadcrumb -->
+    <!-- Page Content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+            <!-- patient widget -->
+            {% include 'patient-widget.html' %}
+            <!-- /patient widget -->
+          </div>
+          <div class="col-md-7 col-lg-8 col-xl-9 dct-appoinment">
+            <div class="card">
+              <div class="card-body pt-0">
+                <div class="user-tabs">
+                  <ul class="nav nav-tabs nav-tabs-bottom nav-justified flex-wrap">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#pat_appointments">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#pres"><span>Prescription</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#transactions"><span> Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="tab-content">
+                  <!-- Appointment Tab -->
+                  <div class="tab-pane fade show active" id="pat_appointments">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                              <tr>
+                                <th>Specialist</th>
+                                <th>Appt Date</th>
+                                <th>Concern</th>
+                                <th>Contact</th>
+                                <th class="text-center">Payment Status</th>
+                                <th>Status</th>
+                                <th class="text-center">Review</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for appointment in appointments %}
+                              <tr>
+                                <td>
+                                  <h2 class="table-avatar">
+                                    <a class="avatar avatar-sm mr-2" href="#">
+                                      <img alt="User Image" class="avatar-img rounded-circle"
+                                        src="{{ appointment.specialist.profile_picture.url }}" />
+                                    </a>
+                                    <a href="{% url 'app-api-doc-details' appointment.specialist.id %}">
+                                      #{{appointment.specialist }}</a>
+                                  </h2>
+                                </td>
+                                <td>
+                                  {{ appointment.date_time }}
+                                  <span class="d-block text-info">{{ appointment.time }}</span>
+                                </td>
+                                <td>{{ appointment.concern }}</td>
+                                <td>
+                                  {{ appointment.patient.contact_email }}
+                                  <span class="d-block text-info">Phone: {{ appointment.patient.contact_phone }}</span>
+                                </td>
+                                <td class="text-center">
+                                  {% if appointment.payment_status %}
+                                  <span class="badge badge-pill bg-success-light">Paid</span>
+                                  {% else %}
+                                  <span class="badge badge-pill bg-warning-light">Pending</span>
+                                  {% endif %}
+                                </td>
+                                <td class="text-center">
+                                  <span class="badge badge-pill
+                                      {% if appointment.status == 'accepted' %}bg-success-light
+                                      {% elif appointment.status == 'pending' %}bg-warning
+                                      {% elif appointment.status == 'completed' %}bg-info
+                                      {% elif appointment.status == 'cancelled' %}bg-danger
+                                      {% elif appointment.status == 'rejected' %}bg-secondary
+                                      {% endif %}">
+                                    {{ appointment.get_status_display }}
+                                  </span>
+                                </td>
+                                <td class="text-center">
+                                  {% if appointment.status == 'completed' %}
+                                  <div class="table-action">
+                                    <span>
+                                      <a href="{% url 'app-api-patient-add-feedback' appointment.specialist.id %}">
+                                        <i class="fa fa-star"></i>
+                                      </a>
+                                    </span>
+                                  </div>
+                                  {% endif %}
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- Pagination -->
+                        <nav aria-label="Appointments Pagination">
+                          <ul class="pagination justify-content-center">
+                            {% if appointments.has_previous %}
+                              <li class="page-item">
+                                <a class="page-link" href="?appointment_page={{ appointments.previous_page_number }}">Previous</a>
+                              </li>
+                            {% endif %}
+                            {% for i in appointments.paginator.page_range %}
+                              <li class="page-item {% if appointments.number == i %}active{% endif %}">
+                                <a class="page-link" href="?appointment_page={{ i }}">{{ i }}</a>
+                              </li>
+                            {% endfor %}
+                            {% if appointments.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="?appointment_page={{ appointments.next_page_number }}">Next</a>
+                              </li>
+                            {% endif %}
+                          </ul>
+                        </nav>
+                        <!-- /Pagination -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Appointment Tab -->
+                  <!-- Prescription Tab -->
+                  <div class="tab-pane fade" id="pres">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>Prescription</th>
+                                <th>Specialist</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for p in prescriptions %}
+                              <tr>
+                                <td>{{ p.created_at }}</td>
+                                <td class="w-50">{{ p.prescription_text|linebreaks }}</td>
+                                <td>
+                                  <h2 class="table-avatar">
+                                    <a class="avatar avatar-sm mr-2" href="">
+                                      <img alt="User Image" class="avatar-img rounded-circle"
+                                        src="{{ p.diagnosis.appointment.specialist.profile_picture.url }}">
+                                    </a>
+                                    <a
+                                      href="{% url 'app-api-doc-details' p.diagnosis.appointment.specialist.id %}">{{ p.diagnosis.appointment.specialist.full_name }}</a>
+                                  </h2>
+                                </td>
+                                <td>
+                                  {{ p.diagnosis.appointment.patient.contact_email }}
+                                  <span class="d-block text-info">Phone: {{ p.diagnosis.appointment.patient.contact_phone }}</span>
+                                </td>
+                                <td class="text-left">
+                                  <div class="table-action">
+                                    <a class="btn btn-sm bg-info-light"
+                                      href="{% url 'app-api-patient-prescription' p.id%}">
+                                      <i class="far fa-eye"></i> View
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- Pagination -->
+                        <nav aria-label="Prescriptions Pagination">
+                          <ul class="pagination justify-content-center">
+                            {% if prescriptions.has_previous %}
+                              <li class="page-item">
+                                <a class="page-link" href="?prescription_page={{ prescriptions.previous_page_number }}">Previous</a>
+                              </li>
+                            {% endif %}
+                            {% for i in prescriptions.paginator.page_range %}
+                              <li class="page-item {% if prescriptions.number == i %}active{% endif %}">
+                                <a class="page-link" href="?prescription_page={{ i }}">{{ i }}</a>
+                              </li>
+                            {% endfor %}
+                            {% if prescriptions.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="?prescription_page={{ prescriptions.next_page_number }}">Next</a>
+                              </li>
+                            {% endif %}
+                          </ul>
+                        </nav>
+                        <!-- /Pagination -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Prescription Tab -->
+                  <!-- Transaction Tab -->
+                  <div class="tab-pane fade" id="transactions">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                              <tr>
+                                <th>Reference</th>
+                                <th>Transaction Date</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for transaction in transactions %}
+                              <tr>
+                                <td>{{ transaction.reference }}</td>
+                                <td>{{ transaction.timestamp }}</td>
+                                <td>{{ transaction.amount }}</td>
+                                <td>
+                                  <span class="badge badge-pill
+                                      {% if transaction.status == 'successful' %}bg-success-light
+                                      {% elif transaction.status == 'pending' %}bg-warning
+                                      {% elif transaction.status == 'failed' %}bg-danger
+                                      {% endif %}">
+                                    {{ transaction.get_status_display }}
+                                  </span>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <!-- Pagination -->
+                        <nav aria-label="Transactions Pagination">
+                          <ul class="pagination justify-content-center">
+                            {% if transactions.has_previous %}
+                              <li class="page-item">
+                                <a class="page-link" href="?transaction_page={{ transactions.previous_page_number }}">Previous</a>
+                              </li>
+                            {% endif %}
+                            {% for i in transactions.paginator.page_range %}
+                              <li class="page-item {% if transactions.number == i %}active{% endif %}">
+                                <a class="page-link" href="?transaction_page={{ i }}">{{ i }}</a>
+                              </li>
+                            {% endfor %}
+                            {% if transactions.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="?transaction_page={{ transactions.next_page_number }}">Next</a>
+                              </li>
+                            {% endif %}
+                          </ul>
+                        </nav>
+                        <!-- /Pagination -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Transaction Tab -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Page Content -->
+  </div>
+  <!-- /Main Wrapper -->
+  <!-- jQuery -->
+  <script src="{% static 'static/HealthStack-System/js/Normal/jquery-3.2.1.min.js' %}"></script>
+  <!-- Bootstrap Core JS -->
+  <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+  <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+  <!-- Slimscroll JS -->
+  <script src="{% static 'static/HealthStack-System/plugins/Normal/slimscroll/jquery.slimscroll.min.js' %}"></script>
+  <!-- Custom JS -->
+  <script src="{% static 'static/HealthStack-System/js/Normal/script.js' %}"></script>
+</body>
+</html>

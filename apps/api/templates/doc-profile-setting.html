@@ -1,0 +1,297 @@
+{% load static %}
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+      <title>Health360</title>
+      <!-- Favicons -->
+      <link rel="icon" type="image/x-icon" href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}" />
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}" />
+      <!-- Fontawesome CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}" />
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}" />
+      <!-- Datetimepicker CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/bootstrap-datetimepicker.min.css' %}" />
+      <!-- Select2 CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/select2/css/select2.min.css' %}" />
+      <!-- Main CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/style.css' %}" />
+      <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <!-- Main Wrapper -->
+      <div class="main-wrapper">
+         <!-- Breadcrumb -->
+         {% include 'doc-navbar.html' %}
+         <!-- /Breadcrumb -->
+         <!-- Page Content -->
+         <div class="content">
+            <div class="container-fluid">
+               <div class="row">
+                  <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+                     <!-- patient widget -->
+                     {% include 'doc-sidebar.html' %}
+                     <!-- /patient widget -->
+                  </div>
+                  <!-- Profile Settings Form -->
+                  <div class="col-md-7 col-lg-8 col-xl-9">
+
+                     <form action="{% url 'app-api-doc-profile-update' specialist.id %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row form-row">
+                           <div class="col-12 col-md-12">
+                              <div class="form-group">
+                                 <div class="change-avatar">
+                                    <div class="profile-img">
+                                       {% if specialist.profile_picture %}
+                                       <img src="{{specialist.profile_picture.url}}" alt="User Image">
+                                       {% else %}<img src="{% static 'static/images/doctors/user-default.png' %}">{% endif %}
+                                    </div>
+                                    <div class="upload-img">
+                                       <div class="change-photo-btn">
+                                          <span><i class="fa fa-upload"></i> Upload Photo</span>
+                                          <input type="file" class="upload" name="profile_picture">
+                                       </div>
+                                       <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <h5 class="mb-3 col-md-12 text-uppercase">Personal Info</h5>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Username <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control" readonly value="{{specialist.user}}" >
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Email <span class="text-danger">*</span></label>
+                                 <input type="text" class="form-control" readonly value="{{specialist.contact_email}}" name="contact_email" >
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Name</label>
+                                 <input type="text" class="form-control" value="{{ specialist.full_name }}" name="full_name">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Date of Birth</label>
+                                 <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ specialist.date_of_birth|date:'Y-m-d' }}" required/>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Mobile</label>
+                                 <input type="text" value="{{specialist.contact_phone}}" class="form-control" name="contact_phone">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>National ID</label>
+                                 <input type="text" value="{{specialist.national_id}}" class="form-control" name="national_id">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Languages Spoken</label>
+                                 <input type="text" value="{{specialist.languages_spoken}}" class="form-control" name="languages_spoken">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Gender</label>
+                                 <input type="text" class="form-control" value="{{ specialist.gender }}" name="gender">
+                              </div>
+                           </div>
+                           <hr class="col-12"/>
+                           <h5 class="mb-3 col-md-12 text-uppercase">Professional Info </h5>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label class="form-label" for="category">Category</label>
+                                 <select id="category" name="category" class="select2 form-select w-100 pl-3" required style="height: 40px">
+                                 {% for category in categories %}
+                                 <option  value="{{ category.id }}" {% if category.id == specialist.category.id %}selected{% endif %}>{{ category.name|upper}}    -    KES {{category.pricing|upper}}</option>
+                                 {% endfor %}
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Medical License Number</label>
+                                 <input type="text" value="{{specialist.medical_license_number}}" class="form-control" name="medical_license_number">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Hospital</label>
+                                 <select id="hospital" name="hospital" class="select2 form-select w-100 pl-3" required style="height: 40px">
+                                 {% for hospital in hospitals %}
+                                 <option class="p-2" value="{{ hospital.hospital_id }}" {% if hospital.hospital_id == specialist.hospital.hospital_id %}selected{% endif %}>{{ hospital.name|upper }}</option>
+                                 {% endfor %}
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Years of Experience</label>
+                                 <input type="number" value="{{specialist.years_of_experience}}" class="form-control" name="years_of_experience">
+                              </div>
+                           </div>
+                           <div class="col-12">
+                              <div class="form-group">
+                                 <label>Description</label>
+                                 <textarea class="form-control" name="description" style="font-size: 14px; line-height: 20px">{{specialist.description}}</textarea>
+                              </div>
+                           </div>
+                           <div class="col-12">
+                              <div class="form-group">
+                                 <label>Biography</label>
+                                 <textarea class="form-control" name="biography" style="font-size: 14px; line-height: 20px">{{specialist.biography}}</textarea>
+                              </div>
+                           </div>
+                           <!-- Availability and working hours -->
+                           <hr class="col-12"/>
+                           <h5 class="mb-3 col-md-12 text-uppercase">Working Hours </h5>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="sunday_availability" {% if specialist.sunday_availability %}checked{% endif %}>
+                                 <label>Sunday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="sunday_start_time" value="{{ specialist.sunday_start_time|time:'H:i' }}">
+                                    <input type="time" name="sunday_end_time" value="{{ specialist.sunday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="monday_availability" {% if specialist.monday_availability %}checked{% endif %}>
+                                 <label>Monday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="monday_start_time" value="{{ specialist.monday_start_time|time:'H:i' }}">
+                                    <input type="time" name="monday_end_time" value="{{ specialist.monday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="tuesday_availability" {% if specialist.tuesday_availability %}checked{% endif %}>
+                                 <label>Tuesday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="tuesday_start_time" value="{{ specialist.tuesday_start_time|time:'H:i' }}">
+                                    <input type="time" name="tuesday_end_time" value="{{ specialist.tuesday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="wednesday_availability" {% if specialist.wednesday_availability %}checked{% endif %}>
+                                 <label>Wednesday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="wednesday_start_time" value="{{ specialist.wednesday_start_time|time:'H:i' }}">
+                                    <input type="time" name="wednesday_end_time" value="{{ specialist.wednesday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="thursday_availability" {% if specialist.thursday_availability %}checked{% endif %}>
+                                 <label>Thursday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="thursday_start_time" value="{{ specialist.thursday_start_time|time:'H:i' }}">
+                                    <input type="time" name="thursday_end_time" value="{{ specialist.thursday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                 <input type="checkbox" name="friday_availability" {% if specialist.friday_availability %}checked{% endif %}>
+                                 <label>Friday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="friday_start_time" value="{{ specialist.friday_start_time|time:'H:i' }}">
+                                    <input type="time" name="friday_end_time" value="{{ specialist.friday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-12">
+                              <div class="form-group">
+                                 <input type="checkbox" name="saturday_availability" {% if specialist.saturday_availability %}checked{% endif %}>
+                                 <label>Saturday</label>
+                                 <div class="mt-1">
+                                    <input type="time" name="saturday_start_time" value="{{ specialist.saturday_start_time|time:'H:i' }}">
+                                    <input type="time" name="saturday_end_time" value="{{ specialist.saturday_end_time|time:'H:i' }}">
+                                 </div>
+                              </div>
+                           </div>
+                           <hr class="col-12"/>
+                           <h5 class="mb-3 col-md-12 text-uppercase">Social Accounts </h5>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Facebook</label>
+                                 <input type="text" value="{{specialist.facebook}}" class="form-control" name="facebook">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>Instagram</label>
+                                 <input type="text" value="{{specialist.instagram}}" class="form-control" name="instagram">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>WhatsApp</label>
+                                 <input type="text" value="{{specialist.whatsApp}}" class="form-control" name="whatsApp">
+                              </div>
+                           </div>
+                           <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                 <label>X</label>
+                                 <input type="text" value="{{specialist.x}}" class="form-control" name="x">
+                              </div>
+                           </div>
+                           <div>
+                              <input type="hidden" value="{{specialist.user.id}}" class="form-control" name="user">
+                              <input type="hidden" value="{{specialist.average_rating}}" class="form-control" name="average_rating">
+                              <input type="hidden" value="{{specialist.total_consultations}}" class="form-control" name="total_consultations">
+                           </div>
+                           <div class="col-12 submit-section">
+                              <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+                  <!-- /Profile Settings Form -->
+               </div>
+            </div>
+         </div>
+         <!-- /Page Content -->
+      </div>
+      <!-- /Main Wrapper -->
+      <!-- jQuery -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+      <!-- Bootstrap Core JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+      <!-- Select2 JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/select2/js/select2.min.js' %}"></script>
+      <!-- Datetimepicker JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/moment.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap-datetimepicker.min.js' %}"></script>
+      <!-- Sticky Sidebar JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/ResizeSensor.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"></script>
+      <!-- Custom JS -->
+      <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+      <!-- Searchbar JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/sidebar.js' %}"></script>
+   </body>
+   <!-- doccure/profile-settings.html  30 Nov 2019 04:12:18 GMT -->
+</html>

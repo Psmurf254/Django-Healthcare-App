@@ -1,0 +1,234 @@
+{% load static %}
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1.0, user-scalable=0"
+         />
+      <title>Health360</title>
+      <!-- Favicons -->
+      <link
+         type="image/x-icon"
+         href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}"
+         rel="icon"
+         />
+      <!-- Bootstrap CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}"
+         />
+      <!-- Fontawesome CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+         />
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+         />
+      <!-- Datetimepicker CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/bootstrap-datetimepicker.min.css' %}"
+         />
+      <!-- Select2 CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/plugins/Normal/select2/css/select2.min.css' %}"
+         />
+      <!-- Main CSS -->
+      <link
+         rel="stylesheet"
+         href="{% static 'static/HealthStack-System/css/Normal/style.css' %}"
+         />
+      <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body>
+      <!-- Main Wrapper -->
+      <div class="main-wrapper">
+         <!-- Breadcrumb -->
+         {% include 'doc-navbar.html' %}
+         <!-- /Breadcrumb -->
+         <!-- Page Content -->
+         <div class="content">
+            <div class="container-fluid">
+               <div class="row">
+                  <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+                     <!-- patient widget -->
+                     {% include 'doc-sidebar.html' %}
+                     <!-- /patient widget -->
+                  </div>
+                  <div class="col-md-7 col-lg-8 col-xl-9 dct-appoinment">
+                     <div class="card">
+                        <div class="card-body pt-0">
+                           <div class="user-tabs">
+                              <ul class="nav nav-tabs nav-tabs-bottom nav-justified flex-wrap">
+                                 <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#test"><span>Test Reports</span></a>
+                                 </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#pres"><span>Prescription</span></a>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div class="tab-content">
+                              <!-- Prescription Tab -->
+                              <div class="tab-pane fade" id="pres">
+                                 <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                       <div class="table-responsive">
+                                          <table class="table table-hover table-center mb-0">
+                                             <thead>
+                                                <tr>
+                                                   <th>Date</th>
+                                                   <th>Patient</th>
+                                                   <th>Contact</th>
+                                                   <th>Action</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                {% for p in prescriptions %}
+                                                <tr>
+                                                   <td>{{ p.updated_at }}</td>
+                                                   <td>{{p.consultation.appointment.patient.full_name}}</td>
+                                                   <td>
+                                                      {{ p.consultation.appointment.patient.contact_email }}
+                                                      <span class="d-block text-info">Phone: {{ p.consultation.appointment.patient.contact_phone }}</span>
+                                                   </td>
+                                                   <td class="text-left">
+                                                      <div class="table-action">
+                                                         <a class="btn btn-sm bg-info-light"
+                                                            href="{% url 'app-api-appointment-add-prescription' p.consultation.appointment.id%}">
+                                                         <i class="far fa-edit"></i> Edit
+                                                         </a>
+                                                      </div>
+                                                   </td>
+                                                </tr>
+                                                {% endfor %}
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                       <!-- Pagination -->
+                                       <nav aria-label="Prescriptions Pagination">
+                                          <ul class="pagination justify-content-center">
+                                             {% if prescriptions.has_previous %}
+                                             <li class="page-item">
+                                                <a class="page-link" href="?prescription_page={{ prescriptions.previous_page_number }}">Previous</a>
+                                             </li>
+                                             {% endif %}
+                                             {% for i in prescriptions.paginator.page_range %}
+                                             <li class="page-item {% if prescriptions.number == i %}active{% endif %}">
+                                                <a class="page-link" href="?prescription_page={{ i }}">{{ i }}</a>
+                                             </li>
+                                             {% endfor %}
+                                             {% if prescriptions.has_next %}
+                                             <li class="page-item">
+                                                <a class="page-link" href="?prescription_page={{ prescriptions.next_page_number }}">Next</a>
+                                             </li>
+                                             {% endif %}
+                                          </ul>
+                                       </nav>
+                                       <!-- /Pagination -->
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- /Prescription Tab -->
+                              <!-- Test Report Tab -->
+                              <div class="tab-pane fade show active" id="test">
+                                 <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                       <div class="table-responsive">
+                                          <table class="table table-hover table-center mb-0">
+                                             <thead>
+                                                <tr>
+                                                   <th>Ordered Date</th>
+                                                   <th>Patient</th>
+                                                   <th>Test Name</th>
+                                                   <th>Results</th>
+                                                   <th>Status</th>
+                                                   <th>Action</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                {% for test in test_reports %}
+                                                <tr>
+                                                   <td>{{ test.ordered_date }}</td>
+                                                   <td>{{test.consultation.appointment.patient.full_name}}
+                                                   </td>
+                                                   <td>{{ test.test_name}}</td>
+                                                   <td> {{test.results}}</td>
+                                                   <td> {{test.status}}</td>
+                                                   <td class="text-left">
+                                                      <div class="table-action">
+                                                         <a class="btn btn-sm bg-info-light"
+                                                            href="{% url 'app-api-doc-update-test' test.consultation.appointment.id %}">
+                                                         <i class="far fa-edit"></i> Edit
+                                                         </a>
+                                                      </div>
+                                                   </td>
+                                                </tr>
+                                                {% endfor %}
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                       <!-- Pagination -->
+                                       <nav aria-label="Prescriptions Pagination">
+                                          <ul class="pagination justify-content-center">
+                                             {% if prescriptions.has_previous %}
+                                             <li class="page-item">
+                                                <a class="page-link" href="?prescription_page={{ prescriptions.previous_page_number }}">Previous</a>
+                                             </li>
+                                             {% endif %}
+                                             {% for i in prescriptions.paginator.page_range %}
+                                             <li class="page-item {% if prescriptions.number == i %}active{% endif %}">
+                                                <a class="page-link" href="?prescription_page={{ i }}">{{ i }}</a>
+                                             </li>
+                                             {% endfor %}
+                                             {% if prescriptions.has_next %}
+                                             <li class="page-item">
+                                                <a class="page-link" href="?prescription_page={{ prescriptions.next_page_number }}">Next</a>
+                                             </li>
+                                             {% endif %}
+                                          </ul>
+                                       </nav>
+                                       <!-- /Pagination -->
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- /Test Report Tab -->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- /Page Content -->
+      </div>
+      <!-- /Main Wrapper -->
+      <!-- jQuery -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+      <!-- Bootstrap Core JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+      <!-- Select2 JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/select2/js/select2.min.js' %}"></script>
+      <!-- Datetimepicker JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/moment.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap-datetimepicker.min.js' %}"></script>
+      <!-- Sticky Sidebar JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/ResizeSensor.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"></script>
+      <!-- Custom JS -->
+      <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+      <!-- Searchbar JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/sidebar.js' %}"></script>
+   </body>
+   <!-- doccure/profile-settings.html  30 Nov 2019 04:12:18 GMT -->
+</html>

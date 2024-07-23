@@ -1,0 +1,492 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=0" name="viewport"/>
+  <title>Health360</title>
+
+  <!-- Favicons -->
+  <link href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}" rel="icon" type="image/x-icon"/>
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}" rel="stylesheet"/>
+
+  <!-- Fontawesome CSS -->
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+        rel="stylesheet"/>
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}" rel="stylesheet"/>
+
+  <!-- Main CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/style.css' %}" rel="stylesheet"/>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.min.js"></script>
+  <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+  <!-- Breadcrumb -->
+  {% include 'doc-navbar.html'%}
+  <!-- /Breadcrumb -->
+
+  <!-- Page Content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+          <!-- Profile Sidebar -->
+           {% include 'doc-sidebar.html'%}
+          <!-- /Profile Sidebar -->
+        </div>
+
+        <div class="col-md-7 col-lg-8 col-xl-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card dash-card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget dct-border-rht">
+                        <div class="circle-bar circle-bar1">
+                          <div class="circle-graph1" data-percent="75">
+                            <img alt="patient" class="img-fluid"
+                                 src="{% static 'HealthStack-System/images/Normal/icon-01.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Tomorrow's Appointments</h6>
+                          <h3>{{ next_day_appointments.count }}</h3>
+                          <p class="text-muted">{{ next_day_date }}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget dct-border-rht">
+                        <div class="circle-bar circle-bar2">
+                          <div class="circle-graph2" data-percent="65">
+                            <img alt="Patient" class="img-fluid"
+                                 src="{% static 'HealthStack-System/images/Normal/icon-02.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Today's Patient</h6>
+                          <h3>{{ today_appointments.count }}</h3>
+                          <p class="text-muted">{{ current_date }}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget">
+                        <div class="circle-bar circle-bar3">
+                          <div class="circle-graph3" data-percent="50">
+                            <img alt="Patient" class="img-fluid"
+                                 src="{% static 'HealthStack-System/images/Normal/icon-03.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Total Appointments</h6>
+                          <h3>{{ total_appointments_count }}</h3>
+                          <p class="text-muted">All time</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="mb-4">Patient Appointments</h4>
+
+              <!-- Appointment Tabs -->
+              <div class="appointment-tab">
+                <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#all-appointments">All</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#today-appointments">Today</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#next-day-appointments">Tomorrow</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <!-- All Appointments Tab-->
+                  <div class="tab-pane active" id="all-appointments">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                            <tr>
+                              <th>Patient Name</th>
+                              <th>Appt Date</th>
+                              <th>Concern</th>
+                              <th>Contact</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for appointment in all_appointments %}
+                            <tr>
+                              <td>
+                                <h2 class="table-avatar">
+                                  <a class="avatar avatar-sm mr-2" href="patient-profile.html">
+                                    <img alt="User Image"
+                                         class="avatar-img rounded-circle" src="{{ appointment.patient.profile_picture.url }}"/>
+                                  </a>
+                                  <a href="">#{{ appointment.patient.full_name }}</a>
+                                </h2>
+                              </td>
+                              <td>{{ appointment.date_time|date:"Y-m-d" }}</td>
+                              <td>{{ appointment.concern }}</td>
+                              <td>
+                                {{ appointment.patient.contact_email }}
+                                <span class="d-block text-info">{{ appointment.patient.contact_phone }}</span>
+                              </td>
+                              <td>
+                                {% if appointment.status == 'accepted' %}
+                                <span class="badge badge-pill bg-success-light">Accepted</span>
+                                {% elif appointment.status == 'completed' %}
+                                <span class="badge badge-pill bg-info-light">Completed</span>
+                                {% elif appointment.status == 'Pending' %}
+                                <span class="badge badge-pill bg-warning-light">Pending</span>
+                                {% elif appointment.status == 'Cancelled' %}
+                                <span class="badge badge-pill bg-danger-light">Cancelled</span>
+                                {% elif appointment.status == 'rejected' %}
+                                <span class="badge badge-pill bg-warning-light">Rejected</span>
+                                {% endif %}
+                              </td>
+                              <td>
+                                  <div class="dropdown">
+                                    <p class="btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></p>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton p-2">
+                                      {% if appointment.status == 'Pending' %}
+                                       <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-item">
+                                        {% csrf_token %}
+                                         <input type="hidden" name="status" value="accepted">
+                                        <button type="submit" class="btn btn-link p-0" style="font-size: 14px">Accept Patient</button>
+                                         </form>
+                                        <button class="btn btn-link ml-3" id="rejectform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Reject Patient</button>
+                                        <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="rejectform p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row rejectform">
+                                          <div class="col-12 col-md-12">
+                                         <input type="text" class="form-control" name="reject_reason" id="reject_reason" placeholder="Reject Reason" required/>
+                                         <input type="hidden" name="status" value="rejected">
+                                          </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                      {% if appointment.status == 'completed' %}
+                                     <button class="btn btn-link ml-3" id="prescribe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Prescribe Patient</button>
+                                      <form action="{% url 'app-api-appointment-add-prescription' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="prescribe p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row prescribe">
+                                          <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Diagnosis Text</label>
+                                               <input type="text" class="form-control" name="diagnosis_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Prescription Text</label>
+                                               <input type="text" class="form-control" name="prescription_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                       {% if appointment.status == 'accepted' %}
+                                      <a class="dropdown-item" href="{% url 'app-api-video-chat' appointment.patient.id %}" target="_blank">Start Meeting</a>
+                                       {% endif %}
+                                    </div>
+                                  </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /All Appointments Tab -->
+
+                  <!-- Today's Appointments Tab -->
+                  <div class="tab-pane" id="today-appointments">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                            <tr>
+                              <th>Patient Name</th>
+                              <th>Appt Date</th>
+                              <th>Concern</th>
+                              <th>Contact</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for appointment in today_appointments %}
+                           <tr>
+                              <td>
+                                <h2 class="table-avatar">
+                                  <a class="avatar avatar-sm mr-2" href="patient-profile.html">
+                                    <img alt="User Image"
+                                         class="avatar-img rounded-circle" src="{{ appointment.patient.profile_picture.url }}"/>
+                                  </a>
+                                  <a href="">#{{ appointment.patient.full_name }}</a>
+                                </h2>
+                              </td>
+                              <td>{{ appointment.date_time|date:"Y-m-d" }}</td>
+                              <td>{{ appointment.concern }}</td>
+                              <td>
+                                {{ appointment.patient.contact_email }}
+                                <span class="d-block text-info">{{ appointment.patient.contact_phone }}</span>
+                              </td>
+                              <td>
+                                {% if appointment.status == 'accepted' %}
+                                <span class="badge badge-pill bg-success-light">Accepted</span>
+                                {% elif appointment.status == 'completed' %}
+                                <span class="badge badge-pill bg-info-light">Completed</span>
+                                {% elif appointment.status == 'Pending' %}
+                                <span class="badge badge-pill bg-warning-light">Pending</span>
+                                {% elif appointment.status == 'Cancelled' %}
+                                <span class="badge badge-pill bg-danger-light">Cancelled</span>
+                                {% elif appointment.status == 'rejected' %}
+                                <span class="badge badge-pill bg-warning-light">Rejected</span>
+                                {% endif %}
+                              </td>
+                              <td>
+                                  <div class="dropdown">
+                                    <p class="btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></p>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton p-2">
+                                      {% if appointment.status == 'Pending' %}
+                                       <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-item">
+                                        {% csrf_token %}
+                                         <input type="hidden" name="status" value="accepted">
+                                        <button type="submit" class="btn btn-link p-0" style="font-size: 14px">Accept Patient</button>
+                                         </form>
+                                        <button class="btn btn-link ml-3" id="rejectform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Reject Patient</button>
+                                        <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="rejectform p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row rejectform">
+                                          <div class="col-12 col-md-12">
+                                         <input type="text" class="form-control" name="reject_reason" id="reject_reason" placeholder="Reject Reason" required/>
+                                         <input type="hidden" name="status" value="rejected">
+                                          </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                      {% if appointment.status == 'completed' %}
+                                     <button class="btn btn-link ml-3" id="prescribe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Prescribe Patient</button>
+                                      <form action="{% url 'app-api-appointment-add-prescription' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="prescribe p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row prescribe">
+                                          <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Diagnosis Text</label>
+                                               <input type="text" class="form-control" name="diagnosis_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Prescription Text</label>
+                                               <input type="text" class="form-control" name="prescription_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                       {% if appointment.status == 'accepted' %}
+                                      <a class="dropdown-item" href="{% url 'app-api-video-chat' appointment.patient.id %}" target="_blank">Start Meeting</a>
+                                       {% endif %}
+                                    </div>
+                                  </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Today's Appointments Tab -->
+
+                  <!-- Next Day's Appointments Tab -->
+                  <div class="tab-pane" id="next-day-appointments">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                            <tr>
+                              <th>Patient Name</th>
+                              <th>Appt Date</th>
+                              <th>Concern</th>
+                              <th>Contact</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for appointment in next_day_appointments %}
+                             <tr>
+                              <td>
+                                <h2 class="table-avatar">
+                                  <a class="avatar avatar-sm mr-2" href="patient-profile.html">
+                                    <img alt="User Image"
+                                         class="avatar-img rounded-circle" src="{{ appointment.patient.profile_picture.url }}"/>
+                                  </a>
+                                  <a href="">#{{ appointment.patient.full_name }}</a>
+                                </h2>
+                              </td>
+                              <td>{{ appointment.date_time|date:"Y-m-d" }}</td>
+                              <td>{{ appointment.concern }}</td>
+                              <td>
+                                {{ appointment.patient.contact_email }}
+                                <span class="d-block text-info">{{ appointment.patient.contact_phone }}</span>
+                              </td>
+                              <td>
+                                {% if appointment.status == 'accepted' %}
+                                <span class="badge badge-pill bg-success-light">Accepted</span>
+                                {% elif appointment.status == 'completed' %}
+                                <span class="badge badge-pill bg-info-light">Completed</span>
+                                {% elif appointment.status == 'Pending' %}
+                                <span class="badge badge-pill bg-warning-light">Pending</span>
+                                {% elif appointment.status == 'Cancelled' %}
+                                <span class="badge badge-pill bg-danger-light">Cancelled</span>
+                                {% elif appointment.status == 'rejected' %}
+                                <span class="badge badge-pill bg-warning-light">Rejected</span>
+                                {% endif %}
+                              </td>
+                              <td>
+                                  <div class="dropdown">
+                                    <p class="btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></p>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton p-2">
+                                      {% if appointment.status == 'Pending' %}
+                                       <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-item">
+                                        {% csrf_token %}
+                                         <input type="hidden" name="status" value="accepted">
+                                        <button type="submit" class="btn btn-link p-0" style="font-size: 14px">Accept Patient</button>
+                                         </form>
+                                        <button class="btn btn-link ml-3" id="rejectform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Reject Patient</button>
+                                        <form action="{% url 'app-api-appointment-update-status' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="rejectform p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row rejectform">
+                                          <div class="col-12 col-md-12">
+                                         <input type="text" class="form-control" name="reject_reason" id="reject_reason" placeholder="Reject Reason" required/>
+                                         <input type="hidden" name="status" value="rejected">
+                                          </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                      {% if appointment.status == 'completed' %}
+                                     <button class="btn btn-link ml-3" id="prescribe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px">Prescribe Patient</button>
+                                      <form action="{% url 'app-api-appointment-add-prescription' appointment.id %}" method="post" class="dropdown-menu" aria-labelledby="prescribe p-2">
+                                        {% csrf_token %}
+                                         <div class="row form-row prescribe">
+                                          <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Diagnosis Text</label>
+                                               <input type="text" class="form-control" name="diagnosis_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                               <label>Prescription Text</label>
+                                               <input type="text" class="form-control" name="prescription_text" required>
+                                            </div>
+                                         </div>
+                                            <div class="col-12 col-md-12">
+                                          <button type="submit" class="btn btn-primary submit-btn" style="font-size: 12px">Submit</button>
+                                         </div>
+                                         </div>
+                                         </form>
+                                       {% endif %}
+                                       {% if appointment.status == 'accepted' %}
+                                      <a class="dropdown-item" href="{% url 'app-api-video-chat' appointment.patient.id %}" target="_blank">Start Meeting</a>
+                                       {% endif %}
+                                    </div>
+                                  </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /Next Day's Appointments Tab -->
+                </div>
+              </div>
+              <!-- /Appointment Tabs -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Content -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    include footer
+  </footer>
+  <!-- /Footer -->
+
+</div>
+<!-- /Main Wrapper -->
+
+  <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+      <!-- Bootstrap Core JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+      <!-- Select2 JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/select2/js/select2.min.js' %}"></script>
+      <!-- Datetimepicker JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/moment.min.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap-datetimepicker.min.js' %}"></script>
+      <!-- Sticky Sidebar JS -->
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/ResizeSensor.js' %}"></script>
+      <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"></script>
+      <!-- Custom JS -->
+      <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+      <!-- Searchbar JS -->
+      <script src="{% static 'static/HealthStack-System/js/Normal/sidebar.js' %}"></script>
+</body>
+</html>

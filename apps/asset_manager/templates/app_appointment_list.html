@@ -174,10 +174,11 @@
             <td>{{appointment.date_time}}</td>
           <td>
               <div class="badge bg-{% if appointment.status == 'accepted' %}success
-               {% elif appointment.status == 'pending' %}warning
-               {% elif appointment.status == 'completed' %}primary
-               {% elif appointment.status == 'cancelled' %}danger
-               {% elif appointment.status == 'rejected' %}dark
+               {% elif appointment.status == 'Pending' %}warning
+               {% elif appointment.status == 'Completed' %}primary
+               {% elif appointment.status == 'Cancelled' %}danger
+               {% elif appointment.status == 'Rejected' %}dark
+               {% elif appointment.status == 'InProgress' %}success
                {% else %}secondary
                {% endif %} rounded-pill">
                 {{ appointment.get_status_display }}

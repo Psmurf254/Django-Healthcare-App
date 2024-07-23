@@ -1,0 +1,33 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% if messages %}
+  <div class="toast-container end-0 m-1 me-4">
+    {% for message in messages %}
+    <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+      <div class="toast-body text-center text-white fw-medium">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Failed Section -->
+<div class="container mt-5" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="">
+                <div class="card-body">
+                    <img src="{% static 'img/illustrations/page-misc-launching-soon.png' %}" alt="page-misc-not-authorized" width="50">
+                     <h2 class="display-5 mt-4 text-danger">Payment Failed</h2>
+                      <p class="card-text">Unfortunately, your payment of KES {{ transaction.amount }} was not successful.
+                      Kindly initiate the payment again</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Failed Section -->
+
+{% include 'footer.html'%}

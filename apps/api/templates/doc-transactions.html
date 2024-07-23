@@ -1,0 +1,199 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=0" name="viewport"/>
+  <title>Health360</title>
+
+  <!-- Favicons -->
+  <link href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}" rel="icon" type="image/x-icon"/>
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}" rel="stylesheet"/>
+
+  <!-- Fontawesome CSS -->
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+        rel="stylesheet"/>
+  <link href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}" rel="stylesheet"/>
+
+  <!-- Main CSS -->
+  <link href="{% static 'static/HealthStack-System/css/Normal/style.css' %}" rel="stylesheet"/>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.min.js"></script>
+  <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+{% if user.is_authenticated %}
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+  <!-- Breadcrumb -->
+  {% include 'doc-navbar.html'%}
+  <!-- /Breadcrumb -->
+
+  <!-- Page Content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+          <!-- Profile Sidebar -->
+          {% include 'doc-sidebar.html'%}
+          <!-- /Profile Sidebar -->
+        </div>
+
+        <div class="col-md-7 col-lg-8 col-xl-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card dash-card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget dct-border-rht">
+                        <div class="circle-bar circle-bar1">
+                          <div class="circle-graph1" data-percent="75">
+                            <img alt="patient" class="img-fluid"
+                                 src="{% static 'HealthStack-System/images/Normal/icon-01.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Total Paid</h6>
+                          <h3 class="text-success">KES {{ total_paid }}</h3>
+                          <p class="text-muted">Paid</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget dct-border-rht">
+                        <div class="circle-bar circle-bar2">
+                          <div class="circle-graph2" data-percent="65">
+                            <img alt="Patient" class="img-fluid"
+                                 src="{% static 'HealthStack-System/images/Normal/icon-02.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Total Due</h6>
+                          <h3 class="text-warning">KES {{ total_due }}</h3>
+                          <p class="text-muted">Due</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                      <div class="dash-widget">
+                        <div class="circle-bar circle-bar3">
+                          <div class="circle-graph3" data-percent="50">
+                            <img alt="Patient" class="img-fluid"
+                                 src="{% static 'static/HealthStack-System/images/Normal/icon-03.png' %}"/>
+                          </div>
+                        </div>
+                        <div class="dash-widget-info">
+                          <h6>Total Transactions</h6>
+                          <h3>{{ total_transactions_count }}</h3>
+                          <p class="text-muted">All time</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="mb-4">Transactions</h4>
+              <div class="appointment-tab">
+                <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                  <li class="nav-item">
+                    <a data-toggle="tab" href="#transactions"></a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <!-- All transactions Tab-->
+                  <div class="tab-pane active" id="transactions">
+                    <div class="card card-table mb-0">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-center mb-0">
+                            <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Transaction Date</th>
+                              <th>Amount</th>
+                              <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                              <td>
+                                {{transaction.reference}}
+                              </td>
+                              <td>{{ transaction.timestamp|date:"Y-m-d" }}</td>
+                              <td>{{ transaction.amount }}</td>
+                              <td>
+                                {% if transaction.status == 'Paid' %}
+                                <span class="badge badge-pill bg-success-light">Paid</span>
+                                {% elif transaction.status == 'Due' %}
+                                <span class="badge badge-pill bg-warning-light">Due</span>
+                                {% elif appointment.status == 'Cancelled' %}
+                                <span class="badge badge-pill bg-danger-light">Cancelled</span>
+                                {% endif %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+               <!-- All transactions Tab-->
+                </div>
+              </div>
+           <!-- / Transactions Tab-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Content -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    include footer
+  </footer>
+  <!-- /Footer -->
+
+</div>
+<!-- /Main Wrapper -->
+{% else %}
+<!-- Unauthorized Access -->
+<script>
+  window.location.href = "{% url 'login' %}";
+</script>
+{% endif %}
+
+<!-- jQuery -->
+<script src="{% static 'static/HealthStack-System/js/Normal/jquery-3.2.1.min.js' %}"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+<script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+
+<!-- Slimscroll JS -->
+<script src="{% static 'static/HealthStack-System/plugins/Normal/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+<!-- Custom JS -->
+<script src="{% static 'static/HealthStack-System/js/Normal/script.js' %}"></script>
+
+</body>
+</html>

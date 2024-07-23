@@ -1,0 +1,80 @@
+{% load static %}
+
+<div class="profile-sidebar h-100">
+  <div class="widget-profile pro-widget-content">
+    <div class="profile-info-widget">
+      <a href="#" class="booking-doc-img">
+         {% if specialist.profile_picture %}
+        <img
+          src="{{ specialist.profile_picture.url }}"
+          alt="User Image"
+        />
+        {% else %}<img src="{% static 'static/images/doctors/user-default.png' %}">{% endif %}
+      </a>
+      <div class="profile-det-info">
+        <h3>{{ specialist.full_name }}</h3>
+
+        <div class="patient-details">
+          <h5 class="mb-0">{{ specialist.category }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-widget">
+    <nav class="dashboard-menu sidebar">
+      <ul>
+        <li class="active">
+          <a href="{% url 'app-api-doc-dashboard' %}">
+            <i class="fas fa-columns"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li>
+        <a href="{% url 'app-api-doc-profile' specialist.id%}">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+        <li>
+          <a href="{% url 'app-api-doc-dashboard' %}">
+            <i class="fas fa-calendar"></i>
+            <span>Appointment</span>
+          </a>
+        </li>
+         <li>
+          <a href="{% url 'app-api-doc-test-reports-list'%}">
+            <i class="fa fa-file"></i>
+            <span>Test Reports</span>
+          </a>
+      </li>
+         <li>
+          <a href="{% url 'app-api-doc-test-reports-list'%}">
+            <i class="fas fa-pills"></i>
+            <span>Prescriptions</span>
+          </a>
+      </li>
+         {% if hospital %} <li>
+        <a href="{% url 'app-api-hospital-profile' hospital.hospital_id %}">
+          <i class="fas fa-hospital"></i>
+          <span>My Hospital</span>
+        </a>
+      </li> {% endif %}
+        <li>
+          <a href="{% url 'app-api-doc-transactions' specialist.id %}">
+            <i class="fa fa-wallet"></i>
+            <span>Transactions</span>
+          </a>
+      </li>
+        <li>
+          <a
+            href="{% url 'app-api-doc-profile-update' specialist.id%}"
+          >
+            <i class="fas fa-user-cog"></i>
+            <span>Profile Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

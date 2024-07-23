@@ -1,0 +1,55 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% if messages %}
+  <div class="toast-container end-0 m-1 me-4">
+    {% for message in messages %}
+    <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+      <div class="toast-body text-center text-white fw-medium">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="container-fluid bg-white bg-appointment mb-5 wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 20px; min-height: 90vh;">
+  <div class="container">
+        <div class="row gx-5">
+            <div class="col-lg-6 py-5">
+            <div class="mt-5">
+              <img
+                 src="{% static 'img/illustrations/girl-with-laptop-light.png' %}"
+                  class="img-fluid"
+                  alt="HealthStack Login"
+                 style="padding: 20px"
+                  />
+            </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="appointment-form h-100 d-flex flex-column justify-content-center py-5 wow zoomIn" data-wow-delay="0.6s">
+                    <p class="font-weight-bold mb-4" style="font-size: 20px">Contact Form</p>
+                    <div id="slots-container">
+                       <form id="Appointment" action="{% url 'app-api-contact' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-6 col-sm-12">
+                                <input type="text" class="form-control mb-4" id="name" name="name" placeholder="Full Name" required style="height: 55px"/>
+                            </div>
+                           <div class="col-6 col-sm-12">
+                                <input type="email" class="form-control mb-4" id="email" name="name" placeholder="Contact Email" required style="height: 55px"/>
+                            </div>
+                          <div class="col-6 col-sm-12">
+                                <textarea  class="form-control mb-4" id="message" name="message" placeholder="Message" required style="height: 55px"></textarea>
+                            </div>
+                                <button class="btn btn-dark w-100 py-3" type="submit">Get In Touch</button>
+                            </div>
+                    </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

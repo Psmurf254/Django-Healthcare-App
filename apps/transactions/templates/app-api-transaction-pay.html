@@ -1,0 +1,59 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+ <!-- Add Transactions Form -->
+   <div class="container-fluid bg-white bg-appointment mb-5 wow fadeInUp" data-wow-delay="0.1s" style="margin-top: 20px;">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-6 py-5">
+                    <div class="py-1">
+                      <p class="font-weight-bold mb-4" style="font-size: 20px">Booking Summary</p>
+                        <table class="table text-uppercase font-weight-bold" style="font-size: 13px">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted">Appt Date & Time:</td>
+                                    <td>{{ transaction.appointment.date_time }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Specialist:</td>
+                                    <td>{{ transaction.appointment.specialist.full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Concern:</td>
+                                    <td>{{ transaction.appointment.concern }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Amount To Pay:</td>
+                                    <td>KES {{ transaction.amount }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="appointment-form h-100 d-flex flex-column justify-content-center p-5 wow zoomIn" data-wow-delay="0.6s">
+                        <p class="font-weight-bold mb-4" style="font-size: 20px">Payment Form</p>
+                       <form class="add-transactions pt-0" id="addTransactionForm" action="{% url 'app-api-transactions-pay' transaction.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-12">
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Mpesa Phone" style="height: 55px" required />
+                            </div>
+                            <div class="col-12">
+                                <button id="submitBtn" class="btn btn-dark w-100 py-3" type="submit">Continue</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% include 'footer.html' %}
+
+<script>
+  console.log('Messages:', {{ messages|safe }});
+</script>
+    <!--/ Add Transactions Form -->
+
+

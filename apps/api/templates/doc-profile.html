@@ -1,0 +1,295 @@
+{% load static %}
+<html lang="en">
+   <!-- doccure/doctor-profile.html  30 Nov 2019 04:12:16 GMT -->
+   <head>
+      <meta charset="utf-8">
+      <title>Health360</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+      <!-- Favicons -->
+      <link type="image/x-icon" href=" {% static 'static/HealthStack-System/images/Normal/favicon.png' %}" rel="icon">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}">
+      <!-- Fontawesome CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}">
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}">
+      <!-- Fancybox CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/plugins/Normal/fancybox/jquery.fancybox.min.css'%}">
+      <!-- Main CSS -->
+      <link rel="stylesheet" href="{% static 'static/HealthStack-System/css/Normal/style.css' %}">
+   </head>
+   <body>
+    <!-- Breadcrumb -->
+        {% include 'main-navbar.html' %}
+      <!-- /Breadcrumb -->
+      <!-- Main Wrapper -->
+      <div class="main-wrappER">
+         <!-- Page Content -->
+         <div class="content">
+            <div class="container-fluid">
+               <div class="row">
+                  <div class="col-md-7 col-lg-8 col-xl-12">
+                     <!-- Doctor Widget -->
+                     <div class="card">
+                        <div class="card-body">
+                           <div class="doctor-widget">
+                              <div class="doc-info-left">
+                                 <div class="doctor-img">
+                                    {% if specialist.profile_picture %}
+                                    <img src="{{specialist.profile_picture.url}}" class="img-fluid" alt="User Image">
+                                    {% else %}
+                                    <img
+                    src="{% static 'static/images/doctors/user-default.png' %}"
+                    class="img-fluid"
+                    alt="Feature"
+                  />
+                                   {% endif %}
+                                 </div>
+                                 <div class="doc-info-cont">
+                                    <h4 class="doc-name">{{specialist.full_name}}</h4>
+                                    <p class="doc-speciality">{{specialist.category}}</p>
+                                    <div class="clinic-services col-lg-10" style="margin-left: -17px;">
+                                       <span>{{specialist.description}}</span>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="doc-info-right">
+                                 <div class="clini-infos">
+                                    <ul>
+                                       <li><i class="far fa-calendar"></i>{{specialist.total_consultations}} Consultations</li>
+                                       <li><i class="far fa-comment"></i>{{specialist.average_rating}} Avg Ratings</li>
+                                       <li><i class="fas fa-history"></i> {{specialist.years_of_experience}} Years Experience</li>
+                                       <li class="font-weight-bold"><i class="far fa-money-bill-alt"></i>{{specialist.category.pricing}} KES</li>
+                                    </ul>
+                                 </div>
+                                 <div class="clinic-booking">
+                                    <a class="apt-btn" href="{% url 'app-api-appointment-add' specialist.id %}">Book Your Appointment</a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /Doctor Widget -->
+                     <!-- Doctor Details Tab -->
+                     <div class="card">
+                        <div class="card-body pt-0">
+                           <!-- Tab Menu -->
+                           <nav class="user-tabs mb-4">
+                              <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                                 <li class="nav-item">
+                                    <a class="nav-link active" href="#doc_overview" data-toggle="tab">Overview</a>
+                                 </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link" href="#doc_hospital" data-toggle="tab">Hospital</a>
+                                 </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link" href="#doc_reviews" data-toggle="tab">Reviews</a>
+                                 </li>
+                              </ul>
+                           </nav>
+                           <!-- /Tab Menu -->
+                           <!-- Tab Content -->
+                           <div class="tab-content pt-0">
+                              <!-- Overview Content -->
+                              <div role="tabpanel" id="doc_overview" class="tab-pane fade show active">
+                                 <div class="row">
+                                    <div class="col-md-12 col-lg-9">
+                                       <!-- About Details -->
+                                       <div class="widget about-widget">
+                                          <h4 class="widget-title">About Me</h4>
+                                          <p class="text-muted">{{specialist.biography|linebreaks}}</p>
+                                       </div>
+                                       <!-- /About Details -->
+                                       <!-- Education Details -->
+                                       <div class="widget education-widget">
+                                          <h4 class="widget-title">Languages</h4>
+                                          <div class="experience-box">
+                                             <ul class="experience-list">
+                                                <li>
+                                                   <div class="experience-user">
+                                                      <div class="before-circle"></div>
+                                                   </div>
+                                                   <div class="experience-content">
+                                                      <div class="timeline-content">
+                                                         <a href="#/" class="name">{{e.degree}}</a>
+                                                         <div>{{specialist.languages_spoken}}</div>
+                                                         <span class="time">{{e.year_of_completion}}</span>
+                                                      </div>
+                                                   </div>
+                                                </li>
+                                             </ul>
+                                          </div>
+                                       </div>
+                                       <!-- /Education Details -->
+                                       <!-- Workings days and hours  -->
+                                       <div class="service-list">
+                                          <h4>Working Hours</h4>
+                                          <ul class="clearfix">
+                                             {% if specialist.monday_availability %}
+                                             <li>Monday: {{ specialist.monday_start_time|time:"h:i A" }} - {{ specialist.monday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.tuesday_availability %}
+                                             <li>Tuesday: {{ specialist.tuesday_start_time|time:"h:i A" }} - {{ specialist.tuesday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.wednesday_availability %}
+                                             <li>Wednesday: {{ specialist.wednesday_start_time|time:"h:i A" }} - {{ specialist.wednesday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.thursday_availability %}
+                                             <li>Thursday: {{ specialist.thursday_start_time|time:"h:i A" }} - {{ specialist.thursday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.friday_availability %}
+                                             <li>Friday: {{ specialist.friday_start_time|time:"h:i A" }} - {{ specialist.friday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.saturday_availability %}
+                                             <li>Saturday: {{ specialist.saturday_start_time|time:"h:i A" }} - {{ specialist.saturday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                             {% if specialist.sunday_availability %}
+                                             <li>Sunday: {{ specialist.sunday_start_time|time:"h:i A" }} - {{ specialist.sunday_end_time|time:"h:i A" }}</li>
+                                             {% endif %}
+                                          </ul>
+                                       </div>
+                                       <!-- /Workings days and hours -->
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- /Overview Content -->
+                              <!-- hospital Content -->
+<div role="tabpanel" id="doc_hospital" class="tab-pane fade">
+    <div class="row">
+        {% for hospital in hospitals %}
+        <div class="profile-widget col-md-12 col-lg-6">
+            <div class="doc-img">
+                <a href="">
+                    {% if hospital.featured_image %}
+                    <img class="img-fluid" alt="Hospital Image" src="{{ hospital.featured_image.url }}">
+                    {% else %}
+                    <img class="img-fluid" alt="User Image" src="{% static 'static/HealthStack-System/images/Normal/pppp.jpg' %}">
+                    {% endif %}
+                </a>
+            </div>
+            <!-- Location List -->
+            <div class="location-list">
+                <div class="row">
+                    <!-- Clinic Content -->
+                    <div class="col-md-6">
+                        <div class="clinic-content">
+                            <div>
+                                <p class="timings-days">
+                                    <span> Name </span>
+                                </p>
+                                <p class="timings-times">
+                                    <span class="text-muted">{{ hospital.name }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="timings-days">
+                                    <span> Type </span>
+                                </p>
+                                <p class="timings-times">
+                                    <span class="text-muted">{{ hospital.hospital_type }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="timings-days">
+                                    <span> Location</span>
+                                </p>
+                                <p class="timings-times">
+                                    <span class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ hospital.address }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Clinic Content -->
+                    <!-- Clinic Timing -->
+                    <div class="col-md-6">
+                        <div class="clinic-timing">
+                            <div>
+                                <p class="timings-days">
+                                    <span> Emails </span>
+                                </p>
+                                <p class="timings-times">
+                                    <span class="text-muted">{{ hospital.email }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="timings-days">
+                                    <span>Contact</span>
+                                </p>
+                                <p class="timings-times">
+                                    <span class="text-muted">{{ hospital.phone_number }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Clinic Timing -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn-primary py-2 px-3 mt-3 text-decoration-none text-center text-uppercase" href="{% url 'app-api-hospital-profile' hospital.hospital_id %}">View Profile</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Location List -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- /hospital Content -->
+
+                              <!-- Reviews Content -->
+                              <div role="tabpanel" id="doc_reviews" class="tab-pane fade">
+                                 <!-- Review Listing -->
+                                 <div class="widget review-listing">
+                                    <ul class="comments-list">
+                                       <div class="invoice-item invoice-table-wrap">
+                                          <div class="widget education-widget">
+                                             <h4 class="widget-title">Review</h4>
+                                             <div class="experience-box">
+                                                <ul class="experience-list">
+                                                   <div class="invoice-item">
+                                                      <div class="row">
+                                                         <div class="col-md-6">
+                                                            <div class="invoice-info">
+                                                               <strong class="customer-text"></strong>
+                                                               {% for review in doctor_review %}
+                                                               <!-- Comment List -->
+                                                               <li>
+                                                                  <div class="comment">
+                                                                     <img class="avatar avatar-sm rounded-circle" alt="User Image" src="{{review.patient.profile_picture.url}}">
+                                                                     <div class="comment-body">
+                                                                        <div class="meta-data">
+                                                                           <span class="comment-author">{{review.patient.full_name}}</span>
+                                                                        </div>
+                                                                        <p class="recommended"><i class="far fa-thumbs-up"></i> {{review.concern}}</p>
+                                                                        <p class="comment-content">{{review.feedback_text}}
+                                                                        </p>
+                                                                     </div>
+                                                                  </div>
+                                                               </li>
+                                                               <!-- /Comment List -->
+                                                               {% endfor %}
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </ul>
+                                    <!-- /Reviews Content -->
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+   <!-- Video Call Modal -->
+   <!-- jQuery -->
+   <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+   <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+</html>

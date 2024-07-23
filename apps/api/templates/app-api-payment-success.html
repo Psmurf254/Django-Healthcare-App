@@ -1,0 +1,35 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% if messages %}
+  <div class="toast-container end-0 m-1 me-4">
+    {% for message in messages %}
+    <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+      <div class="toast-body text-center text-white fw-medium">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Success Section -->
+<div class="container mt-5" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="">
+                <div class="card-body">
+                    <img src="{% static 'img/illustrations/boy-verify-email-light.png' %}" alt="page-misc-not-authorized" >
+                    <h5  class="mt-4 display-5 text-success">Success!</h5>
+                     <p> Your Payment of KES {{ transaction.amount }} have been processed Successfully</p>
+                        <p class="mt-2">Reference {{transaction.reference}}</p>
+                 <button  class="btn btn-primary  px-4">
+                   <a class="text-white text-decoration-none" href="/"> Home</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Success Section -->
+
+{% include 'footer.html'%}

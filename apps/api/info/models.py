@@ -15,7 +15,7 @@ class About(models.Model):
 class Contact(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     message = models.TextField()
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

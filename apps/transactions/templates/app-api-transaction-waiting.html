@@ -1,0 +1,80 @@
+{% load static %}
+{% include 'main-navbar.html' %}
+<script src="{% static 'js/app_toast.js' %}"></script>
+{% if messages %}
+  <div class="toast-container end-0 m-1 me-4">
+    {% for message in messages %}
+    <div class="toast {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% else %}bg-warning{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-bs-delay="2000">
+      <div class="toast-body text-center text-white fw-medium">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+<!-- Processing Section -->
+<div class="container mt-5" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="">
+                <div class="card-body">
+                    <img src="{% static 'img/illustrations/card-website-analytics-3.png' %}" alt="page-misc-not-authorized" width="100">
+                    <h5 class="mt-4 display-5 text-success">Processing......</h5>
+                    <p>An stk Push has been sent to your Mpesa Number. Enter Mpesa Pin to complete the transaction</p>
+                    <p id="countdown" class="text-danger mt-3"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Processing Section -->
+{% include 'footer.html' %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const checkStatusUrl = "{% url 'api-check-transaction-status' pk=transaction.id %}";
+    let countdownTime = 60;  // Countdown time in seconds
+
+    function startCountdown() {
+        const countdownElement = document.getElementById('countdown');
+        const interval = setInterval(() => {
+            countdownTime--;
+            countdownElement.textContent = `Complete transaction in ${countdownTime} seconds...`;
+
+            if (countdownTime <= 0) {
+                clearInterval(interval);
+                window.location.href = "{% url 'app-api-payment-failed' pk=transaction.id %}";
+            }
+        }, 1000);
+    }
+
+    function checkTransactionStatus() {
+        fetch(checkStatusUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Transaction status data:', data);
+                if (data.status === 'Paid') {
+
+                    window.location.href = "{% url 'app-api-payment-success' pk=transaction.id %}";
+                } else if (data.status === 'Cancelled') {
+                    window.location.href = "{% url 'app-api-payment-failed' pk=transaction.id %}";
+                } else {
+                    setTimeout(checkTransactionStatus, 5000);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking transaction status:', error);
+                setTimeout(checkTransactionStatus, 5000);
+            });
+    }
+
+    // Start the countdown and initial status check on page load
+    startCountdown();
+    checkTransactionStatus();
+});
+</script>

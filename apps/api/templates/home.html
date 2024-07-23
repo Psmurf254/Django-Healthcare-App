@@ -1,0 +1,331 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <title>Health360</title>
+
+    <!-- Favicons -->
+    <link
+      type="image/x-icon"
+      href="{% static 'img/logo/logo.png' %}"
+      rel="icon"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}"
+    />
+
+    <!-- Fontawesome CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+    />
+
+    <!-- Main CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/css/Normal/style.css' %}"
+    />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Header -->
+      <header class="header">{% include 'main-navbar.html' %}</header>
+      <!-- header -->
+
+      <!-- Home Banner -->
+      <section class="section section-search" style="background-color:rgb(172, 209, 242); padding-bottom: 0px;min-height: 0px;padding-left: 0px;padding-right: 0px;">
+        <div  style="background-color:rgb(172, 209, 242)">
+          <div class="banner-wrapper" style="background-color:rgb(172, 209, 242);padding-bottom: 20px;padding-top: 12px;">
+            <div class="banner-header text-center">
+              <h1>Welcome To Health360</h1>
+              <p>
+                Choose well by choosing us.
+              </p>
+            </div>
+          </div>
+          <div class="home-image">
+            <img
+              src="{% static 'static/HealthStack-System/images/Normal/p2.png' %}"
+              class="img-fluid" style="width: 100%;"
+            />
+          </div>
+        </div>
+      </section>
+      <!-- /Home Banner -->
+
+      <!-- Clinic and Specialities -->
+      <section class="section section-specialities" style="padding-top: 80px">
+        <div class="container-fluid">
+          <div class="section-header text-center">
+            <h2>Professional Categories </h2>
+            <p class="sub-title">
+            </p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-md-9">
+              <!-- Slider -->
+              <div class="specialities-slider slider">
+                <!-- Slider Item -->
+                 {% for category in categories%}
+                <div class="speicality-item text-center" style="max-width: 250px">
+                  <a class="text-decoration-none" href="{% url 'app-api-doc-list' category.id%}">
+                  <div class="speicality-img">
+                    {% if category.icon %}
+                     <img
+                      src="{{category.icon.url}}"
+                      class="img-fluid"
+                      alt="Speciality"
+                     style="border-radius: 50px; width: 100px; height: 100px">
+                    {% else %}
+                    <img
+                      src="{% static 'static/HealthStack-System/images/Normal/specialities/specialities-01.png' %}"
+                      class="img-fluid"
+                      alt="Speciality"
+                    />
+                    {% endif %}
+                    <span><i class="fa fa-circle" aria-hidden="true"></i></span>
+                  </div>
+                  <p>{{category.name}}</p>
+                    <h6 class="pt-2 text-warning">KES {{category.pricing}}</h6>
+                  <h6 class="text-muted">{{category.total_specialists}} Doctors</h6>
+                    </a>
+                </div>
+                {% endfor %}
+                <!-- /Slider Item -->
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Clinic and Specialities -->
+
+      <!-- common consultations Section -->
+      <section class="section section-doctor">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="section-header">
+                 <h2>Expert Consultations</h2>
+               <p>Connecting You with Top Health Professionals</p>
+              </div>
+              <div class="about-content">
+                <p>
+                Discover and book consultations with leading doctors from various hospitals, all in one place.
+                </p>
+              </div>
+            </div>
+
+
+            <div class="col-lg-8">
+              <div class="doctor-slider slider">
+
+                {% for item in common_consultations %}
+                <!-- Doctor Widget -->
+                <div class="profile-widget" style="height: 55vh">
+                  <div class="doc-img">
+                    <a href="{% url 'app-api-doc-list' item.category.id%}" style="text-decoration: none">
+                      {% if item.image %}
+                      <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{{ item.image.url }}"
+                      >
+                      {% else %}
+                       <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{% static 'static/HealthStack-System/images/Normal/pppp.jpg' %}"
+                      />
+                      {% endif %}
+                    </a>
+                    <a href="{% url 'app-api-doc-list' item.category.id%}" style="text-decoration: none">
+                      <i class="far fa-bookmark"></i>
+                    </a>
+                  </div>
+                  <div class="pro-content">
+                    <h3 class="title">
+                     <a href="{% url 'app-api-doc-list' item.category.id%}" style="text-decoration: none">{{item.name}}</a>
+                    </h3>
+                     <h6 class="pt-2 text-warning">KES {{item.category.pricing}}</h6>
+                    <p class="speciality">
+                      {{ item.category }}
+                    </p>
+                  </div>
+                </div>
+                <!-- /Doctor Widget -->
+                {% endfor %}
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- /Common consultations  Section -->
+
+      <!-- Top Doctors -->
+      <section class="section section-features">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-5 features-img">
+              <img
+                src="{% static 'static/HealthStack-System/images/Normal/pppp.jpg' %}"
+                class="img-fluid"
+                alt="Feature"
+              />
+            </div>
+            <div class="col-md-7">
+              <div class="section-header">
+            <h2 class="mt-2">Meet Top Specialists</h2>
+            <p>
+              Explore multiple hospitals and book appointments with your preferred doctors, all in one place.
+            </p>
+               </div>
+              <div class="features-slider slider mb-5" style="height: 40vh">
+                <!-- Slider Item -->
+                {% for doctor in top_specialists %}
+                <div class="feature-item text-center">
+                  {% if doctor.profile_picture %}
+                  <a href="{% url 'app-api-doc-details' doctor.id %}" style="text-decoration: none">
+                  <img
+                    src="{{ doctor.profile_picture.url }}"
+                    class="img-fluid"
+                    alt="Feature"
+                  />
+                  {% else %}
+                   <img
+                    src="{% static 'static/images/doctors/user-default.png' %}"
+                    class="img-fluid"
+                    alt="Feature"
+                  />
+                  </a>
+                  {% endif %}
+                  <p>{{doctor.full_name}} </p>
+                  <h6 class="pt-2 text-warning" style="font-size: 12px">KES {{doctor.category.pricing}}</h6>
+                  <h6 class="text-muted" style="font-size: 12px">{{doctor.total_consultations}} Consultations</h6>
+                </div>
+                {% endfor %}
+                <!-- /Slider Item -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--/Top Doctors -->
+
+      <!-- Hospitals Section -->
+      <section class="section section-doctor">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="section-header">
+                 <h2>Your Health, Our Priority</h2>
+               <p>Discover World-Class Medical Facilities and Expertise</p>
+              </div>
+              <div class="about-content">
+                <p>
+                Discover and book consultations with leading doctors from various hospitals, all in one place.
+                </p>
+                <p>
+
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="doctor-slider slider">
+
+                {% for hospital in hospitals %}
+                <!-- Doctor Widget -->
+                <div class="profile-widget" style="height: 50vh">
+                  <div class="doc-img">
+                    <a href="{% url 'app-api-hospital-profile' hospital.hospital_id %}" style="text-decoration: none">
+                      {% if hospital.featured_image %}
+                      <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{{ hospital.featured_image.url }}"
+                      >
+                      {% else %}
+                       <img
+                        class="img-fluid"
+                        alt="User Image"
+                        src="{% static 'static/HealthStack-System/images/Normal/pppp.jpg' %}"
+                      />
+                      {% endif %}
+                    </a>
+                    <a href="{% url 'app-api-hospital-profile' hospital.hospital_id %}" style="text-decoration: none">
+                      <i class="far fa-bookmark"></i>
+                    </a>
+                  </div>
+                  <div class="pro-content">
+                    <h3 class="title">
+                     <a href="{% url 'app-api-hospital-profile' hospital.hospital_id %}" style="text-decoration: none">{{hospital.name}}</a>
+                    </h3>
+                    <p class="speciality">
+                      {{ hospital.hospital_type }}
+                    </p>
+                  </div>
+                </div>
+                <!-- /Doctor Widget -->
+                {% endfor %}
+
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- /Hospitals  Section -->
+
+
+      <!-- Footer -->
+      {% include 'footer.html' %}
+      <!-- /Footer -->
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+    <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+    />
+
+    <!-- Slick JS -->
+    <script src="{% static 'static/HealthStack-System/Outside_assets/js/slick.js' %}"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+  </body>
+
+  <!-- doccure/index.html  30 Nov 2019 04:12:03 GMT -->
+</html>

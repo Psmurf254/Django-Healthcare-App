@@ -1,0 +1,150 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <title>Health360</title>
+
+    <!-- Favicons -->
+    <link
+      type="image/x-icon"
+      href="{% static 'static/HealthStack-System/images/Normal/favicon.png' %}"
+      rel="icon"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/css/Normal/bootstrap.min.css' %}"
+    />
+
+    <!-- Fontawesome CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/fontawesome/css/all.min.css' %}"
+    />
+
+    <!-- Datetimepicker CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/css/Normal/bootstrap-datetimepicker.min.css' %}"
+    />
+
+    <!-- Select2 CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/plugins/Normal/select2/css/select2.min.css' %}"
+    />
+
+    <!-- Main CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'static/HealthStack-System/css/Normal/style.css' %}"
+    />
+
+    <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+     <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <!-- Breadcrumb -->
+    {% include 'doc-navbar.html' %}
+    <!-- /Breadcrumb -->
+
+    <!-- Page Content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+            <!-- patient widget -->
+            {% include 'doc-sidebar.html' %}
+            <!-- /patient widget -->
+          </div>
+
+          <!-- Add feedback Form -->
+          <div class="col-md-7 col-lg-8 col-xl-9">
+									<form action="{% url 'app-api-doc-order-test' appointment.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+										<div class="row form-row">
+                       <h5 class="font-weight-bold text-primary my-3">Update Consultation Details</h5>
+											<div class="col-12 col-md-12">
+												 <div class="form-group">
+                          <label>Symptoms<span class=""></span></label>
+                           <textarea  class="form-control" name="symptoms">{{consultation.symptoms}}</textarea>
+                        </div>
+											</div>
+                      <div class="col-12 col-md-12">
+												 <div class="form-group">
+                          <label>Diagnosis<span class=""></span></label>
+                           <textarea  class="form-control" name="diagnosis">{{consultation.diagnosis}}</textarea>
+                        </div>
+											</div>
+                      <div class="col-12 col-md-12">
+												 <div class="form-group">
+                          <label>Notes<span class=""></span></label>
+                           <textarea  class="form-control" name="notes">{{consultation.notes}}</textarea>
+                        </div>
+											</div>
+                      <hr class="col-12"/>
+                       <h5 class=" col-12 font-weight-bold text-primary my-3">Test Details</h5>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label>Test Name<span class=""></span></label>
+                          <input type="text" class="form-control"  name="test_name">
+                        </div>
+											</div>
+										<div class="submit-section">
+											<button type="submit" class="btn btn-primary submit-btn">Order Test</button>
+										</div>
+                    </div>
+									</form>
+							 </div>
+          <!-- /Add feedback Form-->
+        </div>
+      </div>
+    </div>
+    <!-- /Page Content -->
+  </div>
+  <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/popper.min.js' %}"></script>
+    <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap.min.js' %}"></script>
+
+    <!-- Select2 JS -->
+    <script src="{% static 'static/HealthStack-System/plugins/Normal/select2/js/select2.min.js' %}"></script>
+
+    <!-- Datetimepicker JS -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/moment.min.js' %}"></script>
+    <script src="{% static 'static/HealthStack-System/js/Normal/bootstrap-datetimepicker.min.js' %}"></script>
+
+    <!-- Sticky Sidebar JS -->
+    <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/ResizeSensor.js' %}"></script>
+    <script src="{% static 'static/HealthStack-System/plugins/Normal/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'static/HealthStack-System/Outside_assets/js/script.js' %}"></script>
+
+    <!-- Searchbar JS -->
+    <script src="{% static 'static/HealthStack-System/js/Normal/sidebar.js' %}"></script>
+  </body>
+
+  <!-- doccure/profile-settings.html  30 Nov 2019 04:12:18 GMT -->
+</html>
